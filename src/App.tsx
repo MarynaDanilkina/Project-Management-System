@@ -1,4 +1,10 @@
+import Footer from 'components/footer/footer';
 import Header from 'components/header/header';
+import AllBoard from 'pages/AllBoard/AllBoard';
+import Board from 'pages/Board/Board';
+import LogIn from 'pages/LogIn/LogIn';
+import Profile from 'pages/Profile/Profile';
+import Registration from 'pages/Registration/Registration';
 import Welcome from 'pages/welcome/welcome';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
@@ -9,13 +15,15 @@ function App() {
       <Header />
 
       <Routes>
-        <Route path="/" element={<Welcome />} />
-        <Route path="/log-in" element={<Welcome />} />
-        <Route path="/sign-up" element={<Welcome />} />
-        <Route path="/profile" element={<Welcome />} />
+        <Route path="/" element={<AllBoard />} />
+        <Route path="/log-in" element={<LogIn />} />
+        <Route path="/sign-up" element={<Registration />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/welcome" element={<Welcome />} />
-        <Route path="/board/:id" element={<Welcome />} />
+        <Route path="/board/:id" element={<Board />} />
       </Routes>
+
+      <Footer />
     </>
   );
 }
