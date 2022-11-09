@@ -21,6 +21,14 @@ const Welcome = () => {
             <img src="./welcome.png" alt="welcome" />
           </div>
         </div>
+        <div className="welcome__video-container">
+          <div className="welcome__video-wrapper">
+            <h2>Как работать с приложением</h2>
+            <div>
+              <div className="welcome__video"></div>
+            </div>
+          </div>
+        </div>
         <div className="welcome__team-container">
           <div className="welcome__team-wrapper">
             <h2>Наша команда</h2>
