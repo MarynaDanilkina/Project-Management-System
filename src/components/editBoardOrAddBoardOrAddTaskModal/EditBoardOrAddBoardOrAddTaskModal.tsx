@@ -5,11 +5,11 @@ import FormControl, { ModalWindowProps } from 'components/formControl/FormContro
 
 type FormDialogProps = {
   titleError: boolean;
-  descriptionError: boolean;
   titleLabel: string;
   descreptionLabel: string;
   titleInputID: string;
   descreptionInputID: string;
+  onFocus: () => void;
 };
 
 export default function FormDialog({
@@ -21,8 +21,8 @@ export default function FormDialog({
   descreptionLabel,
   titleInputID,
   descreptionInputID,
-  titleError = false,
-  descriptionError = false,
+  titleError,
+  onFocus,
 }: ModalWindowProps & FormDialogProps) {
   return (
     <>
@@ -37,6 +37,7 @@ export default function FormDialog({
             fullWidth
             variant="outlined"
             error={titleError}
+            onFocus={onFocus}
           />
           <TextField
             margin="dense"
@@ -47,7 +48,6 @@ export default function FormDialog({
             variant="outlined"
             multiline={true}
             rows={5}
-            error={descriptionError}
           />
         </DialogContent>
       </FormControl>

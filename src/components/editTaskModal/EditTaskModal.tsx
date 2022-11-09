@@ -11,6 +11,7 @@ type EditTaskModalProps = {
   defaultValue: string;
   titleRef: React.RefObject<HTMLInputElement>;
   selectRef: React.RefObject<HTMLSelectElement>;
+  onFocus: () => void;
 };
 
 export default function EditTaskModal({
@@ -24,6 +25,7 @@ export default function EditTaskModal({
   titleRef,
   selectRef,
   titleError,
+  onFocus,
 }: ModalWindowProps & EditTaskModalProps) {
   return (
     <>
@@ -35,6 +37,7 @@ export default function EditTaskModal({
               margin="dense"
               inputRef={titleRef}
               defaultValue={defaultValue}
+              onFocus={onFocus}
               id="edit-task__input"
               label="Descreption"
               type="text"
