@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box } from '@mui/material';
 
-export type ModalWindowProps = {
+export type DialogWindowProps = {
   onClose: () => void;
   onOk: () => void;
   title?: string;
@@ -14,13 +14,13 @@ export type ModalWindowProps = {
 
 type FormControlProps = { children?: React.ReactElement };
 
-export default function FormDialog({
+export default function CustomFormControl({
   title,
   isModalOpen,
   onClose,
   onOk,
   children,
-}: ModalWindowProps & FormControlProps) {
+}: DialogWindowProps & FormControlProps) {
   return (
     <>
       <Dialog open={isModalOpen} onClose={onClose}>

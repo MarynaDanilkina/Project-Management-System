@@ -1,9 +1,11 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import DialogContent from '@mui/material/DialogContent';
-import FormControl, { ModalWindowProps } from 'components/formControl/FormControl';
+import CustomFormControl, {
+  DialogWindowProps,
+} from 'components/customFormControl/CustomFormControl';
 
-type FormDialogProps = {
+type EditBoardOrAddBoardOrAddTaskDialogWindowProps = {
   titleError: boolean;
   titleLabel: string;
   descreptionLabel: string;
@@ -12,7 +14,7 @@ type FormDialogProps = {
   onFocus: () => void;
 };
 
-export default function FormDialog({
+export default function EditBoardOrAddBoardOrAddTaskDialogWindow({
   onClose,
   onOk,
   isModalOpen,
@@ -23,10 +25,10 @@ export default function FormDialog({
   descreptionInputID,
   titleError,
   onFocus,
-}: ModalWindowProps & FormDialogProps) {
+}: DialogWindowProps & EditBoardOrAddBoardOrAddTaskDialogWindowProps) {
   return (
     <>
-      <FormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
+      <CustomFormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
         <DialogContent>
           <TextField
             autoFocus
@@ -50,7 +52,7 @@ export default function FormDialog({
             rows={5}
           />
         </DialogContent>
-      </FormControl>
+      </CustomFormControl>
     </>
   );
 }

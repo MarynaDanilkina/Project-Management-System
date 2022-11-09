@@ -1,20 +1,22 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import DialogContent from '@mui/material/DialogContent';
-import FormControl, { ModalWindowProps } from 'components/formControl/FormControl';
+import CustomFormControl, {
+  DialogWindowProps,
+} from 'components/customFormControl/CustomFormControl';
 
 type AddColumnProps = { titleError: boolean; onFocus: () => void };
 
-export default function AddColumn({
+export default function AddColumnDialogWindow({
   onClose,
   onOk,
   onFocus,
   isModalOpen,
   titleError,
-}: ModalWindowProps & AddColumnProps) {
+}: DialogWindowProps & AddColumnProps) {
   return (
     <>
-      <FormControl title="Add column" onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
+      <CustomFormControl title="Add column" onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
         <DialogContent>
           <TextField
             margin="dense"
@@ -27,7 +29,7 @@ export default function AddColumn({
             error={titleError}
           />
         </DialogContent>
-      </FormControl>
+      </CustomFormControl>
     </>
   );
 }
