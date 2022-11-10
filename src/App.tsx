@@ -15,11 +15,11 @@ function App() {
       <Header />
 
       <Routes>
-        <Route path="/" element={<AllBoard />} />
+        <Route path="/" element={<Welcome />} />
         <Route path="/log-in" element={<LogIn />} />
         <Route path="/sign-up" element={<Registration />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/boards" element={<AllBoard />} />
         <Route path="/board/:id" element={<Board />} />
       </Routes>
 

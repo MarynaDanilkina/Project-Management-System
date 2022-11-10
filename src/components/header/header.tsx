@@ -7,7 +7,7 @@ const Header = () => {
     <header className="header">
       <div className="header__wrapper">
         <div className="header__logo">
-          <Link to="/welcome">
+          <Link to="/">
             <img src="/logo.png" className="header__logo" />
           </Link>
           <h1>team board</h1>
@@ -31,7 +31,7 @@ const Header = () => {
             <p>Выйти</p>
           </div>
           <div className="nav__sign-up-home">
-            <Link to="/">На главную</Link>
+            <Link to="/boards">На главную</Link>
           </div>
         </nav>
       </div>

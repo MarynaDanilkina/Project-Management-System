@@ -37,7 +37,7 @@ const Footer = () => {
         </div>
         <div className="footer__logo">
           <div className="footer__logo__wrapper">
-            <a href="https://rs.school/js/">
+            <a href="https://rs.school/react/">
               <svg className="footer__logo">
                 <use xlinkHref="#rss"></use>
               </svg>
