@@ -10,7 +10,7 @@ interface IRequestOptionsWithToken {
 }
 
 const makeOptions = (
-  body: Record<string, string>,
+  body: Record<string, string | number>,
   method = 'POST',
   token?: string
 ): IRequestOptions => {
@@ -32,4 +32,24 @@ const makeOptionsWithoutBody = (token: string, method = 'GET'): IRequestOptionsW
   headers: { Authorization: `Bearer ${token}` },
 });
 
-export { makeOptions, makeOptionsWithoutBody };
+const makeFileOptions = (
+  files: FileList,
+  fileName: string,
+  taskId: string,
+  token: string,
+  method = 'POST'
+): IRequestOptions => {
+  const body = new FormData();
+  body.append('taskId', taskId);
+  body.append('file', files[0], fileName);
+
+  const options: IRequestOptions = {
+    method,
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(body),
+  };
+
+  return options;
+};
+
+export { makeOptions, makeOptionsWithoutBody, makeFileOptions };

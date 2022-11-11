@@ -1,7 +1,12 @@
 import { makeOptions, makeOptionsWithoutBody } from 'api/apiUtils/makeOptions';
 import makeRequest from 'api/apiUtils/makeRequest';
 import { BASE_URL } from 'api/apiUtils/utils';
-import { IUser } from 'api/contracts';
+
+export interface IUser {
+  id: string;
+  name: string;
+  login: string;
+}
 
 const getAllUsers = async (token: string): Promise<IUser[]> => {
   const response = await makeRequest(BASE_URL + 'users', 200, makeOptionsWithoutBody(token));

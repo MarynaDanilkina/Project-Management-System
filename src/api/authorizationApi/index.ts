@@ -1,7 +1,11 @@
-import { IToken, IUser } from '../contracts';
 import makeRequest from '../apiUtils/makeRequest';
 import { makeOptions } from '../apiUtils/makeOptions';
 import { BASE_URL } from 'api/apiUtils/utils';
+import { IUser } from 'api/usersApi';
+
+export interface IToken {
+  token: string;
+}
 
 const signUp = async (name: string, login: string, password: string): Promise<IUser> => {
   const options = makeOptions({ name, login, password });
