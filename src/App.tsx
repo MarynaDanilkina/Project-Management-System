@@ -9,7 +9,20 @@ import Welcome from 'pages/welcome/welcome';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+/*
+ */
+
 function App() {
+  /*
+  deleteUser(
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8',
+    'ef1436c8-c254-4754-8874-0d88e48bec83'
+  )
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => console.log(err));
+  */
   return (
     <>
       <Header />
