@@ -1,7 +1,7 @@
 import Footer from 'components/footer/footer';
 import Header from 'components/header/header';
 import AllBoard from 'pages/AllBoard/AllBoard';
-import Board from 'pages/Board/Board';
+import BoardID from 'pages/BoardID/BoardID';
 import LogIn from 'pages/LogIn/LogIn';
 import Profile from 'pages/Profile/Profile';
 import Registration from 'pages/Registration/Registration';
@@ -20,7 +20,7 @@ function App() {
         <Route path="/sign-up" element={<Registration />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/boards" element={<AllBoard />} />
-        <Route path="/board/:id" element={<Board />} />
+        <Route path="/board/:id" element={<BoardID />} />
       </Routes>
 
       <Footer />
