@@ -1,6 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchCreateBoard, fetchDeleteBoard, fetchgetAllBoards } from 'api/boardsApi';
-export const initialState = {
+import {
+  fetchCreateBoard,
+  fetchDeleteBoard,
+  fetchgetAllBoards,
+  fetchUpdateBoard,
+  IBoard,
+} from 'api/boardsApi';
+export type IInitialStateBoards = {
+  boards: {
+    id: string;
+    title: string;
+    order: number;
+    tasks: {
+      id: string;
+      title: string;
+      order: number;
+      done: boolean;
+      description: string;
+      userId: string;
+      files: {
+        filename: string;
+        fileSize: number;
+      }[];
+    }[];
+  }[];
+  Allboards: IBoard[];
+};
+export const initialState: IInitialStateBoards = {
   boards: [
     {
       id: '1',
@@ -73,13 +99,7 @@ export const initialState = {
       ],
     },
   ],
-  Allboards: [
-    {
-      id: '9a111e19-24ec-43e1-b8c4-13776842b8d5',
-      title: 'Homework tasks',
-      description: 'My board tasks',
-    },
-  ],
+  Allboards: [],
 };
 
 export const reduserSlice = createSlice({
@@ -96,6 +116,13 @@ export const reduserSlice = createSlice({
       })
       .addCase(fetchCreateBoard.fulfilled, (state, action) => {
         state.Allboards = [...state.Allboards, action.payload];
+      })
+      .addCase(fetchUpdateBoard.fulfilled, (state, action) => {
+        const { id, title, description } = action.payload;
+        const newBoard = { id, title, description };
+        state.Allboards = state.Allboards.map((boards) =>
+          boards.id === action.payload.id ? newBoard : boards
+        );
       });
   },
 });
