@@ -2,7 +2,7 @@ import BoardTasks from 'components/board_tasks/board_tasks';
 import React from 'react';
 import './BoardID.sass';
 
-const Board = () => {
+const BoardId = () => {
   return (
     <div className="Board__container">
       <div className="Board__wrapper">
@@ -17,4 +17,4 @@ const Board = () => {
     </div>
   );
 };
-export default Board;
+export default BoardId;

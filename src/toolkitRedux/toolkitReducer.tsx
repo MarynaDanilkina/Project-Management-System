@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { act } from 'react-dom/test-utils';
+import { fetchCreateBoard, fetchDeleteBoard, fetchgetAllBoards } from 'api/boardsApi';
 export const initialState = {
   boards: [
     {
@@ -73,16 +73,30 @@ export const initialState = {
       ],
     },
   ],
+  Allboards: [
+    {
+      id: '9a111e19-24ec-43e1-b8c4-13776842b8d5',
+      title: 'Homework tasks',
+      description: 'My board tasks',
+    },
+  ],
 };
 
 export const reduserSlice = createSlice({
   name: 'boards',
   initialState,
-  reducers: {
-    boardsRedux(state, action) {
-      console.log(state);
-      console.log(action);
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchgetAllBoards.fulfilled, (state, action) => {
+        state.Allboards = action.payload;
+      })
+      .addCase(fetchDeleteBoard.fulfilled, (state, action) => {
+        state.Allboards = state.Allboards.filter((boards) => boards.id !== action.payload);
+      })
+      .addCase(fetchCreateBoard.fulfilled, (state, action) => {
+        state.Allboards = [...state.Allboards, action.payload];
+      });
   },
 });
 export default reduserSlice.reducer;
