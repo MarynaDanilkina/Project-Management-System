@@ -22,7 +22,7 @@ interface ITaskResponse {
 
 const getAllTasks = async (token: string, boardId: string, columnId: string): Promise<ITask[]> => {
   const response = await makeRequest(
-    `${BASE_URL}boards/${boardId}/columns/${columnId}tasks`,
+    `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
     200,
     makeOptionsWithoutBody(token)
   );
@@ -38,7 +38,7 @@ const createTask = async (
   columnId: string
 ): Promise<ITaskResponse> => {
   const response = await makeRequest(
-    `${BASE_URL}boards/${boardId}/columns/${columnId}tasks`,
+    `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
     201,
     makeOptions({ title, description, userId }, 'POST', token)
   );
@@ -52,7 +52,7 @@ const getTaskById = async (
   taskId: string
 ): Promise<ITask> => {
   const response = await makeRequest(
-    `${BASE_URL}boards/${boardId}/columns/${columnId}tasks${taskId}`,
+    `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
     200,
     makeOptionsWithoutBody(token)
   );
@@ -66,7 +66,7 @@ const deleteTask = async (
   taskId: string
 ): Promise<boolean> => {
   const response = await makeRequest(
-    `${BASE_URL}boards/${boardId}/columns/${columnId}tasks${taskId}`,
+    `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
     204,
     makeOptionsWithoutBody(token, 'DELETE')
   );
@@ -80,7 +80,8 @@ const updateTask = async (
   token: string,
   boardId: string,
   columnId: string,
-  taskId: string
+  taskId: string,
+  userId: string
 ): Promise<{
   title: string;
   order: number;
@@ -90,9 +91,9 @@ const updateTask = async (
   columnId: string;
 }> => {
   const response = await makeRequest(
-    `${BASE_URL}boards/${boardId}/columns/${columnId}tasks${taskId}`,
+    `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
     200,
-    makeOptions({ title, order, description }, 'PUT', token)
+    makeOptions({ title, order, description, userId, boardId, columnId }, 'PUT', token)
   );
   return response;
 };
