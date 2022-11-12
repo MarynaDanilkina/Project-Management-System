@@ -1,24 +1,14 @@
+import { ITaskProps, useAppDispatch } from 'interface/interface';
 import React from 'react';
-export interface ITask {
-  id: string;
-  title: string;
-  order: number;
-  done: boolean;
-  description: string;
-  userId: string;
-  files: {
-    filename: string;
-    fileSize: number;
-  }[];
-}
-[];
-export type ITasksProps = {
-  task: ITask;
-};
+import { reduserSlice } from 'toolkitRedux/toolkitReducer';
+import './task.sass';
 
-const Task = ({ task }: ITasksProps) => {
+const Task = ({ task, board }: ITaskProps) => {
+  const dispatch = useAppDispatch();
+  const { boardsRedux } = reduserSlice.actions;
+
   return (
-    <div className="Board__column-items">
+    <div className="Board__column-items" draggable={true}>
       <div className="Board__column-item">{task.title}</div>
     </div>
   );
