@@ -47,11 +47,21 @@ export const fetchCreateBoard = createAsyncThunk(
 //  );
 //  return response;
 //};
-
-const getBoardById = async (token: string, id: string): Promise<IBoardDetailed> => {
-  const response = await makeRequest(BASE_URL + `boards/${id}`, 200, makeOptionsWithoutBody(token));
-  return response;
-};
+export const fetchGetBoardById = createAsyncThunk(
+  'boards/fetchGetBoardById',
+  async ({ token, id }: { token: string; id: string }): Promise<IBoardDetailed> => {
+    const response = await makeRequest(
+      BASE_URL + `boards/${id}`,
+      200,
+      makeOptionsWithoutBody(token)
+    );
+    return response;
+  }
+);
+//const getBoardById = async (token: string, id: string): Promise<IBoardDetailed> => {
+//  const response = await makeRequest(BASE_URL + `boards/${id}`, 200, makeOptionsWithoutBody(token));
+//  return response;
+//};
 
 export const fetchDeleteBoard = createAsyncThunk(
   'boards/fetchDeleteBoard',
@@ -106,5 +116,3 @@ export const fetchUpdateBoard = createAsyncThunk(
 //  );
 //  return response;
 //};
-
-export { getBoardById };

@@ -1,15 +1,13 @@
-import { ITaskProps, useAppDispatch } from 'interface/interface';
+import { Task } from 'api/contracts';
 import React from 'react';
-import { reduserSlice } from 'toolkitRedux/toolkitReducer';
-import './task.sass';
-
-const Task = ({ task, board }: ITaskProps) => {
-  const dispatch = useAppDispatch();
-
+export interface ITask {
+  task: Task;
+}
+const TaskCompon = ({ task }: ITask) => {
   return (
     <div className="Board__column-items" draggable={true}>
       <div className="Board__column-item">{task.title}</div>
     </div>
   );
 };
-export default Task;
+export default TaskCompon;

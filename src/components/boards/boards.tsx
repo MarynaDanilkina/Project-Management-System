@@ -14,14 +14,14 @@ const Boards = () => {
     dispatch(fetchgetAllBoards(token));
   }, []);
 
-  const { Allboards } = useAppSelector((state) => state);
+  const { Allboards } = useAppSelector((state) => state.boards);
 
   return (
     <div className="allBoard__container">
       {Allboards.map((board) => (
-        //<Link key={board.id} to={`/board/${board.id}`}>
-        <Board board={board} key={board.id} />
-        //</Link>
+        <Link key={board.id} to={`/board/${board.id}`}>
+          <Board board={board} key={board.id} />
+        </Link>
       ))}
     </div>
   );

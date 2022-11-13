@@ -12,43 +12,6 @@ export interface IBoards {
   description: string;
 }
 
-export interface ITasks {
-  id: string;
-  title: string;
-  order: number;
-  tasks: {
-    id: string;
-    title: string;
-    order: number;
-    done: boolean;
-    description: string;
-    userId: string;
-    files: {
-      filename: string;
-      fileSize: number;
-    }[];
-  }[];
-}
-export type ITasksProps = {
-  board: ITasks;
-};
-export interface ITask {
-  id: string;
-  title: string;
-  order: number;
-  done: boolean;
-  description: string;
-  userId: string;
-  files: {
-    filename: string;
-    fileSize: number;
-  }[];
-}
-[];
-export type ITaskProps = {
-  task: ITask;
-  board: ITasks;
-};
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export type AppDispatch = typeof store.dispatch;
