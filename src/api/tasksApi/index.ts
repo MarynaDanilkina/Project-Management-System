@@ -1,3 +1,4 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { makeOptions, makeOptionsWithoutBody } from 'api/apiUtils/makeOptions';
 import makeRequest from 'api/apiUtils/makeRequest';
 import { BASE_URL } from 'api/apiUtils/utils';
@@ -28,22 +29,46 @@ const getAllTasks = async (token: string, boardId: string, columnId: string): Pr
   );
   return response;
 };
-
-const createTask = async (
-  title: string,
-  description: string,
-  userId: string,
-  token: string,
-  boardId: string,
-  columnId: string
-): Promise<ITaskResponse> => {
-  const response = await makeRequest(
-    `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
-    201,
-    makeOptions({ title, description, userId }, 'POST', token)
-  );
-  return response;
-};
+export const fetchCreateTask = createAsyncThunk(
+  'task/fetchCreateTask',
+  async ({
+    title,
+    description,
+    userId,
+    token,
+    boardId,
+    columnId,
+  }: {
+    title: string;
+    description: string;
+    userId: string;
+    token: string;
+    boardId: string;
+    columnId: string;
+  }) => {
+    const response = await makeRequest(
+      `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
+      201,
+      makeOptions({ title, description, userId }, 'POST', token)
+    );
+    return { columnId, task: response };
+  }
+);
+//const createTask = async (
+//  title: string,
+//  description: string,
+//  userId: string,
+//  token: string,
+//  boardId: string,
+//  columnId: string
+//): Promise<ITaskResponse> => {
+//  const response = await makeRequest(
+//    `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
+//    201,
+//    makeOptions({ title, description, userId }, 'POST', token)
+//  );
+//  return response;
+//};
 
 const getTaskById = async (
   token: string,
@@ -98,4 +123,4 @@ const updateTask = async (
   return response;
 };
 
-export { getAllTasks, createTask, getTaskById, deleteTask, updateTask };
+export { getAllTasks, getTaskById, deleteTask, updateTask };

@@ -9,7 +9,7 @@ import {
 } from 'api/boardsApi';
 import { fetchCreateColumn, fetchGetAllColumns } from 'api/columnsApi';
 import { IBoardDetailed, Task } from 'api/contracts';
-import { act } from 'react-dom/test-utils';
+import { fetchCreateTask } from 'api/tasksApi';
 export type IInitialStateBoards = {
   boards: IBoardDetailed;
   Allboards: IBoard[];
@@ -44,12 +44,16 @@ export const reduserSlice = createSlice({
       .addCase(fetchGetBoardById.fulfilled, (state, action) => {
         state.boards = action.payload;
       })
-      .addCase(fetchGetAllColumns.fulfilled, (state, action) => {
-        console.log(action);
-        console.log(state);
-      })
+      .addCase(fetchGetAllColumns.fulfilled, (state, action) => {})
       .addCase(fetchCreateColumn.fulfilled, (state, action) => {
         state.boards.columns = [...state.boards.columns, { ...action.payload, tasks: [] }];
+      })
+      .addCase(fetchCreateTask.fulfilled, (state, action) => {
+        const index = state.boards.columns.findIndex((el) => el.id === action.payload.columnId);
+        state.boards.columns[index].tasks = [
+          ...state.boards.columns[index].tasks,
+          { ...action.payload.task, files: [] },
+        ];
       });
   },
 });

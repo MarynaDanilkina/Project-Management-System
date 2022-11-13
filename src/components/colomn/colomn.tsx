@@ -14,7 +14,7 @@ const Colomn = ({ board }: IBoardProps) => {
           <TaskCompon task={task} key={task.id} />
         ))}
       </div>
-      <AddTask />
+      <AddTask board={board} />
     </div>
   );
 };
