@@ -1,3 +1,4 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { makeOptions, makeOptionsWithoutBody } from 'api/apiUtils/makeOptions';
 import makeRequest from 'api/apiUtils/makeRequest';
 import { BASE_URL } from 'api/apiUtils/utils';
@@ -9,23 +10,52 @@ export interface IColumn {
   order: number;
 }
 
-const getAllColumns = async (token: string, boardId: string): Promise<IColumn[]> => {
-  const response = await makeRequest(
-    `${BASE_URL}boards/${boardId}/columns`,
-    200,
-    makeOptionsWithoutBody(token)
-  );
-  return response;
-};
-
-const createColumn = async (title: string, token: string, boardId: string): Promise<IColumn> => {
-  const response = await makeRequest(
-    `${BASE_URL}boards/${boardId}/columns`,
-    201,
-    makeOptions({ title }, 'POST', token)
-  );
-  return response;
-};
+export const fetchGetAllColumns = createAsyncThunk(
+  'columns/fetchGetAllColumns',
+  async ({ token, boardId }: { token: string; boardId: string }): Promise<IColumn[]> => {
+    const response = await makeRequest(
+      `${BASE_URL}boards/${boardId}/columns`,
+      200,
+      makeOptionsWithoutBody(token)
+    );
+    return response;
+  }
+);
+//const getAllColumns = async (token: string, boardId: string): Promise<IColumn[]> => {
+//  const response = await makeRequest(
+//    `${BASE_URL}boards/${boardId}/columns`,
+//    200,
+//    makeOptionsWithoutBody(token)
+//  );
+//  return response;
+//};
+export const fetchCreateColumn = createAsyncThunk(
+  'columns/fetchCreateColumn',
+  async ({
+    title,
+    token,
+    boardId,
+  }: {
+    title: string;
+    token: string;
+    boardId: string;
+  }): Promise<IColumn> => {
+    const response = await makeRequest(
+      `${BASE_URL}boards/${boardId}/columns`,
+      201,
+      makeOptions({ title }, 'POST', token)
+    );
+    return response;
+  }
+);
+//const createColumn = async (title: string, token: string, boardId: string): Promise<IColumn> => {
+//  const response = await makeRequest(
+//    `${BASE_URL}boards/${boardId}/columns`,
+//    201,
+//    makeOptions({ title }, 'POST', token)
+//  );
+//  return response;
+//};
 
 const getColumnById = async (token: string, boardId: string, columnId: string): Promise<Column> => {
   const response = await makeRequest(
@@ -60,4 +90,4 @@ const updateColumn = async (
   return response;
 };
 
-export { getAllColumns, getColumnById, deleteColumn, updateColumn, createColumn };
+export { getColumnById, deleteColumn, updateColumn };

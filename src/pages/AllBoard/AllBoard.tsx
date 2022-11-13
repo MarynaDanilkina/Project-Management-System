@@ -1,8 +1,19 @@
+import { fetchCreateBoard } from 'api/boardsApi';
 import Boards from 'components/boards/boards';
+import { useAppDispatch } from 'interface/interface';
 import React from 'react';
 import './AllBoard.sass';
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
 
 const AllBoard = () => {
+  const dispatch = useAppDispatch();
+
+  function addBoard() {
+    const title = 'Новая доска создана';
+    const description = 'Описание новой доски';
+    dispatch(fetchCreateBoard({ title, description, token }));
+  }
   return (
     <div className="allBoard__container">
       <svg display="none">
@@ -54,7 +65,9 @@ const AllBoard = () => {
       <div className="allBoard__wrapper">
         <div className="allBoard__link">
           <h2>Ваши доски</h2>
-          <button className="allBoard__button-add">+ Создать</button>
+          <button className="allBoard__button-add" onClick={() => addBoard()}>
+            + Создать
+          </button>
         </div>
         <div className="allBoards__container">
           <Boards />

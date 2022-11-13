@@ -1,27 +1,24 @@
+import { fetchgetAllBoards } from 'api/boardsApi';
 import Board from 'components/board/board';
-import React from 'react';
+import { useAppDispatch, useAppSelector } from 'interface/interface';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-export interface IBoards {
-  id: string;
-  title: string;
-  description: string;
-}
+
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
+
 const Boards = () => {
-  const boards: IBoards[] = [
-    {
-      id: '11111',
-      title: 'Homework tasks1111',
-      description: 'My board tasks1111',
-    },
-    {
-      id: '22222',
-      title: 'Homework tasks2222',
-      description: 'My board tasks2222',
-    },
-  ];
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchgetAllBoards(token));
+  }, []);
+
+  const { Allboards } = useAppSelector((state) => state.boards);
+
   return (
     <div className="allBoard__container">
-      {boards.map((board) => (
+      {Allboards.map((board) => (
         <Link key={board.id} to={`/board/${board.id}`}>
           <Board board={board} key={board.id} />
         </Link>
