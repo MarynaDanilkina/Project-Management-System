@@ -25,7 +25,7 @@ export default class LocalStore implements ILocalStore {
     return this.ls.token;
   };
 
-  updateValue = (token: string) => {
+  updateValue = (token: string | null) => {
     this.ls.token = token;
     localStorage.setItem('Project-manager', JSON.stringify(this.ls));
   };

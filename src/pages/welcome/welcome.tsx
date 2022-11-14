@@ -1,13 +1,15 @@
+import { useAppDispatch, useAppSelector } from 'interface/interface';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { selectError, selectToken } from 'toolkitRedux/userSlice/userSlice';
-import './welcome.sass';
+import fetchUserData from 'toolkitRedux/userSlice/fetchUserDataThunk';
+import { selectToken, selectUser } from 'toolkitRedux/userSlice/userSlice';
 
 const Welcome = () => {
-  const token = useSelector(selectToken);
-  const err = useSelector(selectError);
-  console.log('token', token);
-  console.log('error', err);
+  const dispatch = useAppDispatch();
+  const token = useAppSelector(selectToken);
+  const user = useAppSelector(selectUser);
+  if (token && !user) {
+    dispatch(fetchUserData(token));
+  }
   return (
     <div className="welcome">
       <div className="welcome__wrapper">

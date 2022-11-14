@@ -1,9 +1,10 @@
 import React from 'react';
 import './Profile.sass';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { UserUpDate } from 'interface/interface';
+import { useAppSelector, UserUpDate } from 'interface/interface';
 import ProfileInfo from '../../components/ProfileInfo/';
 import TextInput from 'components/input';
+import { selectUser } from 'toolkitRedux/userSlice/userSlice';
 
 const Profile = () => {
   const {
@@ -11,6 +12,7 @@ const Profile = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<UserUpDate>();
+  const user = useAppSelector(selectUser);
 
   const onSubmit: SubmitHandler<UserUpDate> = (data) => {
     console.log(data);
@@ -35,7 +37,7 @@ const Profile = () => {
         </symbol>
       </svg>
       <div className="profile__wrapper">
-        <ProfileInfo name="Ivan" login="Ivanow" />
+        <ProfileInfo name={user?.name ?? ''} login={user?.login ?? ''} />
         <div className="profile__form-container">
           <div className="profile__form-wrapper">
             <h2>Редактировать профиль</h2>

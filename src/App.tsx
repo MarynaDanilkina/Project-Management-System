@@ -8,8 +8,17 @@ import Profile from 'pages/Profile/Profile';
 import Welcome from 'pages/welcome/welcome';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import LocalStore from 'utility/localStore/localStore';
+import { useAppDispatch } from 'interface/interface';
+import { updateToken } from 'toolkitRedux/userSlice/userSlice';
 
 function App() {
+  const dispatch = useAppDispatch();
+  const localStore = new LocalStore();
+  const token = localStore.getValue();
+  if (token) {
+    dispatch(updateToken(token));
+  }
   return (
     <>
       <Header />
