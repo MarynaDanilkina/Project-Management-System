@@ -1,39 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, Grid, Typography } from '@mui/material';
+import { Alert, Button, Grid, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import theme from 'context/colorThemeMui';
 
 import TextInput from 'components/input';
-import { UserUpDate } from 'interface/interface';
+import { useAppDispatch, useAppSelector, UserUpDate } from 'interface/interface';
 
 import '../Profile/Profile.sass';
-import LocalStore from 'utility/localStore/localStore';
-import { signIn, signUp } from 'api/authorizationApi';
+import fetchSignUp from 'toolkitRedux/userSlice/fetchSignUpThunk';
+import { useNavigate } from 'react-router-dom';
+import { selectError } from 'toolkitRedux/userSlice/userSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-type SignUpProps = { localStore: LocalStore };
-
-const SignUp = ({ localStore }: SignUpProps) => {
+const SignUp = () => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<UserUpDate>();
+  const dispatch = useAppDispatch();
+  const authorizationError = useAppSelector(selectError);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
 
-  const onSubmit = (data: UserUpDate) => {
-    signUp(data.name, data.login, data.password).then((responseSignUp) => {
-      console.log('response signUp', responseSignUp);
-      signIn(data.login, data.password).then((response) => {
-        localStore.updateValue(response.token);
-        console.log('response signIn', response);
-        console.log('data', data);
+  const onSubmit = async (data: UserUpDate) => {
+    dispatch(fetchSignUp(data))
+      .then(unwrapResult)
+      .then(() => {
         setIsSubmitted(true);
-      });
-    });
+        navigate('/');
+      })
+      .catch(() => setIsSubmitted(false));
   };
 
   useEffect(() => {
@@ -41,6 +42,7 @@ const SignUp = ({ localStore }: SignUpProps) => {
       reset();
     }
   }, [isSubmitted, reset]);
+
   return (
     <Container>
       <Grid sx={{ jusctifyContent: 'center' }}>
@@ -64,12 +66,19 @@ const SignUp = ({ localStore }: SignUpProps) => {
                   type="submit"
                   variant="contained"
                   sx={{ width: '250px', height: '3rem', my: '2rem', justifySelf: 'center' }}
-                  disabled={Object.keys(errors).length !== 0}
+                  disabled={Object.keys(errors).length !== 0 && !authorizationError}
                 >
                   Регистрация
                 </Button>
               </ThemeProvider>
             </Grid>
+            {authorizationError && (
+              <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
+                <Alert severity="error" sx={{ fontSize: '1.4rem' }}>
+                  {authorizationError}
+                </Alert>
+              </Grid>
+            )}
           </div>
         </form>
       </Grid>

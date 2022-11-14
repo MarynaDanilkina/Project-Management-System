@@ -1,7 +1,13 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { selectError, selectToken } from 'toolkitRedux/userSlice/userSlice';
 import './welcome.sass';
 
 const Welcome = () => {
+  const token = useSelector(selectToken);
+  const err = useSelector(selectError);
+  console.log('token', token);
+  console.log('error', err);
   return (
     <div className="welcome">
       <div className="welcome__wrapper">
