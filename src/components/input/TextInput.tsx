@@ -1,16 +1,21 @@
-import { UserUpDate } from 'interface/interface';
 import React from 'react';
-import { FieldError, UseFormRegister } from 'react-hook-form';
+import { FieldError, FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
-type TextInputProps = {
-  register: UseFormRegister<UserUpDate>;
-  name: keyof UserUpDate;
+type TextInputProps<DataT extends FieldValues> = {
+  register: UseFormRegister<DataT>;
+  name: Path<DataT>;
   error: FieldError | undefined;
   label: string;
   type?: string;
 };
 
-const TextInput = ({ register, name, error, label, type = 'text' }: TextInputProps) => {
+const TextInput = <DataT extends FieldValues>({
+  register,
+  name,
+  error,
+  label,
+  type = 'text',
+}: TextInputProps<DataT>) => {
   return (
     <div className="profile__form">
       <label>

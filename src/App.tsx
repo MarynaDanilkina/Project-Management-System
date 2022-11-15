@@ -11,6 +11,7 @@ import { Route, Routes } from 'react-router-dom';
 import LocalStore from 'utility/localStore/localStore';
 import { useAppDispatch } from 'interface/interface';
 import { updateToken } from 'toolkitRedux/userSlice/userSlice';
+import fetchUserData from 'toolkitRedux/userSlice/fetchUserDataThunk';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -18,6 +19,7 @@ function App() {
   const token = localStore.getValue();
   if (token) {
     dispatch(updateToken(token));
+    dispatch(fetchUserData(token));
   }
   return (
     <>

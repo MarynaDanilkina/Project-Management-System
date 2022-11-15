@@ -2,7 +2,7 @@ export const BASE_URL = 'https://whispering-mesa-64104.herokuapp.com/';
 
 export type ErrorMessage = { statusCode: number; message: string };
 
-export function parseJwt(token: string): { login: number; userId: string } {
+export function parseJwt(token: string): { login: string; userId: string } {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(

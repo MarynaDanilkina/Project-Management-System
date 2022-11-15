@@ -36,11 +36,12 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchSignIn.fulfilled, (state, { payload }) => {
-      state.token = payload;
+      state.token = payload.token;
+      state.userData = payload.user;
       if (state.error) {
         state.error = null;
       }
-      localStore.updateValue(payload);
+      localStore.updateValue(payload.token);
     });
     builder.addCase(fetchSignIn.rejected, (state, { error }) => {
       state.token = null;
@@ -48,11 +49,12 @@ const userSlice = createSlice({
       state.error = error.message ?? 'Something went wrong.';
     });
     builder.addCase(fetchSignUp.fulfilled, (state, { payload }) => {
-      state.token = payload;
+      state.token = payload.token;
+      state.userData = payload.user;
       if (state.error) {
         state.error = null;
       }
-      localStore.updateValue(payload);
+      localStore.updateValue(payload.token);
     });
     builder.addCase(fetchSignUp.rejected, (state, { error }) => {
       state.token = null;

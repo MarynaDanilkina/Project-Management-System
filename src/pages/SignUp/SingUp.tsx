@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector, UserUpDate } from 'interface/interface'
 import '../Profile/Profile.sass';
 import fetchSignUp from 'toolkitRedux/userSlice/fetchSignUpThunk';
 import { useNavigate } from 'react-router-dom';
-import { selectError } from 'toolkitRedux/userSlice/userSlice';
+import { cleanError, selectError } from 'toolkitRedux/userSlice/userSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 const SignUp = () => {
@@ -42,6 +42,12 @@ const SignUp = () => {
       reset();
     }
   }, [isSubmitted, reset]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(cleanError());
+    };
+  }, [dispatch]);
 
   return (
     <Container>

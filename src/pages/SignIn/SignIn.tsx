@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector, UserUpDate } from 'interface/interface'
 import '../Profile/Profile.sass';
 import fetchSignIn from 'toolkitRedux/userSlice/fetchSignInThunk';
 import { useNavigate } from 'react-router-dom';
-import { selectError } from 'toolkitRedux/userSlice/userSlice';
+import { cleanError, selectError } from 'toolkitRedux/userSlice/userSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 export type SignInData = Omit<UserUpDate, 'name'>;
@@ -22,14 +22,14 @@ const SignIn = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UserUpDate>();
+  } = useForm<SignInData>();
   const dispatch = useAppDispatch();
   const authorizationError = useAppSelector(selectError);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = async (data: UserUpDate) => {
+  const onSubmit = async (data: SignInData) => {
     dispatch(fetchSignIn(data))
       .then(unwrapResult)
       .then(() => {
@@ -44,6 +44,12 @@ const SignIn = () => {
       reset();
     }
   }, [isSubmitted, reset]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(cleanError());
+    };
+  }, [dispatch]);
 
   return (
     <Container>
