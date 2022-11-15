@@ -6,6 +6,7 @@ import fetchSignUp from './fetchSignUpThunk';
 import fetchUserData, { UserData } from './fetchUserDataThunk';
 
 export type userSliceState = {
+  isLoading: boolean;
   token: string | null;
   error: null | string;
   userData: UserData | null;
@@ -18,6 +19,7 @@ const getInitialUserState = (
   token,
   error,
   userData: null,
+  isLoading: false,
 });
 
 const localStore = new LocalStore();
@@ -35,8 +37,12 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchSignIn.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchSignIn.fulfilled, (state, { payload }) => {
       state.token = payload.token;
+      state.isLoading = false;
       state.userData = payload.user;
       if (state.error) {
         state.error = null;
@@ -45,11 +51,16 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchSignIn.rejected, (state, { error }) => {
       state.token = null;
+      state.isLoading = false;
       localStore.updateValue(null);
       state.error = error.message ?? 'Something went wrong.';
     });
+    builder.addCase(fetchSignUp.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchSignUp.fulfilled, (state, { payload }) => {
       state.token = payload.token;
+      state.isLoading = false;
       state.userData = payload.user;
       if (state.error) {
         state.error = null;
@@ -58,14 +69,20 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchSignUp.rejected, (state, { error }) => {
       state.token = null;
+      state.isLoading = false;
       localStore.updateValue(null);
       state.error = error.message ?? 'Something went wrong.';
     });
+    builder.addCase(fetchUserData.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchUserData.fulfilled, (state, { payload }) => {
       state.userData = { userId: payload.userId, name: payload.name, login: payload.login };
+      state.isLoading = false;
     });
     builder.addCase(fetchUserData.rejected, (state) => {
       state.token = null;
+      state.isLoading = false;
       localStore.updateValue(null);
     });
   },
@@ -76,7 +93,8 @@ export const { cleanError, updateToken } = userSlice.actions;
 const selectToken = (state: RootState) => state.user.token;
 const selectError = (state: RootState) => state.user.error;
 const selectUser = (state: RootState) => state.user.userData;
+const selectIsLoading = (state: RootState) => state.user.isLoading;
 
-export { selectToken, selectError, selectUser };
+export { selectToken, selectError, selectUser, selectIsLoading };
 
 export default userSlice.reducer;
