@@ -1,7 +1,10 @@
 import React from 'react';
 import './Profile.sass';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { UserUpDate } from 'interface/interface';
+import { useAppSelector, UserUpDate } from 'interface/interface';
+import ProfileInfo from '../../components/ProfileInfo/';
+import TextInput from 'components/input';
+import { selectUser } from 'toolkitRedux/userSlice/userSlice';
 
 const Profile = () => {
   const {
@@ -9,9 +12,12 @@ const Profile = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<UserUpDate>();
+  const user = useAppSelector(selectUser);
+
   const onSubmit: SubmitHandler<UserUpDate> = (data) => {
     console.log(data);
   };
+
   return (
     <div className="profile__container">
       <svg display="none">
@@ -31,70 +37,21 @@ const Profile = () => {
         </symbol>
       </svg>
       <div className="profile__wrapper">
-        <div className="profile__info-container">
-          <div>
-            <svg className="profile__userSVG">
-              <use xlinkHref="#user"></use>
-            </svg>
-          </div>
-          <div>
-            <div className="profile__info-name">
-              <span>Имя:</span>
-              <span className="profile-info">Иванов</span>
-            </div>
-            <div className="profile__info-login">
-              <span>Логин:</span>
-              <span className="profile-info">User001</span>
-            </div>
-          </div>
-        </div>
+        <ProfileInfo name={user?.name ?? ''} login={user?.login ?? ''} />
         <div className="profile__form-container">
           <div className="profile__form-wrapper">
             <h2>Редактировать профиль</h2>
             <form className="profile__forms" onSubmit={handleSubmit(onSubmit)}>
               <div className="profile__forms-container">
-                <div className="profile__form">
-                  <label>
-                    <p className="profile__form-name">Имя:</p>
-                    <input
-                      className="profile__form-info"
-                      {...register('name', {
-                        required: 'name should not be empty',
-                        minLength: { value: 3, message: 'enter at least 3 characters' },
-                      })}
-                    ></input>
-                  </label>
-                  {errors?.name && <p className="profile__form-error">{errors.name.message}</p>}
-                </div>
-                <div className="profile__form">
-                  <label>
-                    <p className="profile__form-name">Логин:</p>
-                    <input
-                      className="profile__form-info"
-                      {...register('login', {
-                        required: 'login should not be empty',
-                        minLength: { value: 3, message: 'enter at least 3 characters' },
-                      })}
-                    ></input>
-                  </label>
-                  {errors?.login && <p className="profile__form-error">{errors.login.message}</p>}
-                </div>
-                <div className="profile__form">
-                  <label>
-                    <p className="profile__form-name">Пароль:</p>
-                    <input
-                      className="profile__form-info"
-                      type="password"
-                      {...register('password', {
-                        required: 'password should not be empty',
-                        minLength: { value: 3, message: 'enter at least 3 characters' },
-                      })}
-                    ></input>
-                  </label>
-                  {errors?.password && (
-                    <p className="profile__form-error">{errors.password.message}</p>
-                  )}
-                </div>
+                <TextInput register={register} name="name" label="Имя" error={errors?.name} />
+                <TextInput register={register} name="login" label="Логин" error={errors?.login} />
+                <TextInput
+                  register={register}
+                  name="password"
+                  label="Пароль"
+                  type="password"
+                  error={errors?.password}
+                />
                 <div className="profile__form-button">
                   <button
                     className="profile__form-save"

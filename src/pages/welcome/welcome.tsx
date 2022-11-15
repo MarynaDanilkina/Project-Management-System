@@ -1,5 +1,4 @@
 import React from 'react';
-import './welcome.sass';
 
 const Welcome = () => {
   return (
