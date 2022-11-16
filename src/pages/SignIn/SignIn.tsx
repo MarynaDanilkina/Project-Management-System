@@ -56,44 +56,42 @@ const SignIn = () => {
   return (
     <Container>
       <Backdrop open={isLoading} />
-      {!isLoading && (
-        <Grid sx={{ jusctifyContent: 'center' }}>
-          <Typography variant="h3" component="h1" textAlign="center" mt="2rem" mb="3rem">
-            Войти
-          </Typography>
-          <form className="profile__forms" onSubmit={handleSubmit(onSubmit)}>
-            <div className="profile__forms-container">
-              <TextInput register={register} name="login" label="Логин" error={errors?.login} />
-              <TextInput
-                register={register}
-                name="password"
-                label="Пароль"
-                type="password"
-                error={errors?.password}
-              />
+      <Grid sx={{ jusctifyContent: 'center' }}>
+        <Typography variant="h3" component="h1" textAlign="center" mt="2rem" mb="3rem">
+          Войти
+        </Typography>
+        <form className="profile__forms" onSubmit={handleSubmit(onSubmit)}>
+          <div className="profile__forms-container">
+            <TextInput register={register} name="login" label="Логин" error={errors?.login} />
+            <TextInput
+              register={register}
+              name="password"
+              label="Пароль"
+              type="password"
+              error={errors?.password}
+            />
+            <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
+              <ThemeProvider theme={theme}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ width: '250px', height: '3rem', my: '2rem', justifySelf: 'center' }}
+                  disabled={Object.keys(errors).length !== 0 && !authorizationError}
+                >
+                  Войти
+                </Button>
+              </ThemeProvider>
+            </Grid>
+            {authorizationError && (
               <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
-                <ThemeProvider theme={theme}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ width: '250px', height: '3rem', my: '2rem', justifySelf: 'center' }}
-                    disabled={Object.keys(errors).length !== 0 && !authorizationError}
-                  >
-                    Войти
-                  </Button>
-                </ThemeProvider>
+                <Alert severity="error" sx={{ fontSize: '1.4rem' }}>
+                  {authorizationError}
+                </Alert>
               </Grid>
-              {authorizationError && (
-                <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
-                  <Alert severity="error" sx={{ fontSize: '1.4rem' }}>
-                    {authorizationError}
-                  </Alert>
-                </Grid>
-              )}
-            </div>
-          </form>
-        </Grid>
-      )}
+            )}
+          </div>
+        </form>
+      </Grid>
     </Container>
   );
 };
