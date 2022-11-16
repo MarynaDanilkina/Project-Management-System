@@ -1,4 +1,4 @@
-import { fetchDeleteBoard, fetchgetAllBoards, fetchUpdateBoard } from 'api/boardsApi';
+import { fetchDeleteBoard, fetchUpdateBoard } from 'api/boardsApi';
 import { IBoards, useAppDispatch, useAppSelector } from 'interface/interface';
 import React from 'react';
 export type IBoardsProps = {
