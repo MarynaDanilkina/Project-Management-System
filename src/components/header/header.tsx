@@ -33,20 +33,22 @@ const Header = () => {
             </>
           )}
 
-          <div className="nav__item">
-            <Link to="/">+ Новая доска</Link>
-          </div>
-          <div className="nav__item">
-            <Link to="/profile">Профиль</Link>
-          </div>
           {token && (
-            <div className="nav__log-in" onClick={onExitHandle}>
-              <p>Выйти</p>
-            </div>
+            <>
+              <div className="nav__item">
+                <Link to="/">+ Новая доска</Link>
+              </div>
+              <div className="nav__item">
+                <Link to="/profile">Профиль</Link>
+              </div>
+              <div className="nav__log-in" onClick={onExitHandle}>
+                <p>Выйти</p>
+              </div>
+              <div className="nav__sign-up-home">
+                <Link to="/boards">На главную</Link>
+              </div>
+            </>
           )}
-          <div className="nav__sign-up-home">
-            <Link to="/boards">На главную</Link>
-          </div>
         </nav>
       </div>
     </header>

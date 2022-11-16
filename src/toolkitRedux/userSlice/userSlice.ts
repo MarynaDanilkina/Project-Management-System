@@ -58,19 +58,11 @@ const userSlice = createSlice({
     builder.addCase(fetchSignUp.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(fetchSignUp.fulfilled, (state, { payload }) => {
-      state.token = payload.token;
+    builder.addCase(fetchSignUp.fulfilled, (state) => {
       state.isLoading = false;
-      state.userData = payload.user;
-      if (state.error) {
-        state.error = null;
-      }
-      localStore.updateValue(payload.token);
     });
     builder.addCase(fetchSignUp.rejected, (state, { error }) => {
-      state.token = null;
       state.isLoading = false;
-      localStore.updateValue(null);
       state.error = error.message ?? 'Something went wrong.';
     });
     builder.addCase(fetchUserData.pending, (state) => {
