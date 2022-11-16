@@ -26,6 +26,7 @@ export const reduserSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchgetAllBoards.fulfilled, (state, action) => {
+        console.log(action.payload);
         state.Allboards = action.payload;
       })
       .addCase(fetchDeleteBoard.fulfilled, (state, action) => {
