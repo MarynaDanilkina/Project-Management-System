@@ -2,8 +2,7 @@ import { fetchgetAllBoards } from 'api/boardsApi';
 import Board from 'components/board/board';
 import { useAppDispatch, useAppSelector } from 'interface/interface';
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 const Boards = () => {
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.user);

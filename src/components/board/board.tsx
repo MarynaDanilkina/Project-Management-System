@@ -1,10 +1,11 @@
 import { fetchDeleteBoard, fetchUpdateBoard } from 'api/boardsApi';
 import { IBoards, useAppDispatch, useAppSelector } from 'interface/interface';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 export type IBoardsProps = {
   board: IBoards;
 };
-const title = 'Название изменено';
+const title = 'Название изменено2';
 const description = 'Описание изменено';
 const Board = ({ board }: IBoardsProps) => {
   const dispatch = useAppDispatch();

@@ -5,10 +5,11 @@ import React from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 export type IBoardProps = {
   board: Column;
+  index: number;
 };
-const Colomn = ({ board }: IBoardProps) => {
+const Colomn = ({ board, index }: IBoardProps) => {
   return (
-    <Droppable droppableId={board.id}>
+    <Droppable droppableId={'' + index}>
       {(provided, snapshot) => (
         <div className="Board__column" ref={provided.innerRef} {...provided.droppableProps}>
           <h3>{board.title}</h3>

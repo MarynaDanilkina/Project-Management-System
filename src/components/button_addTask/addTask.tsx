@@ -2,7 +2,7 @@ import { Column } from 'api/contracts';
 import { fetchCreateTask } from 'api/tasksApi';
 import { useAppDispatch, useAppSelector } from 'interface/interface';
 import React from 'react';
-const title = 'Новая задача2';
+const title = '3';
 const description = 'описание задачи';
 const userId = 'dd398f23-1324-4e5c-95f7-0dd193b5e89f';
 const token =

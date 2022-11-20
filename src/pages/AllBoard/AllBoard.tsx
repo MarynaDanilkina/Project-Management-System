@@ -1,4 +1,5 @@
 import { fetchCreateBoard } from 'api/boardsApi';
+import BackdropComponent from 'components/backdrop';
 import Boards from 'components/boards/boards';
 import { useAppDispatch, useAppSelector } from 'interface/interface';
 import React, { useEffect } from 'react';
@@ -7,6 +8,7 @@ import './AllBoard.sass';
 const AllBoard = () => {
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.user);
+
   function addBoard() {
     const title = 'Новая доска создана';
     const description = 'Описание новой доски';
@@ -14,9 +16,7 @@ const AllBoard = () => {
       dispatch(fetchCreateBoard({ title, description, token }));
     }
   }
-  useEffect(() => {
-    console.log(token);
-  }, [token]);
+
   return (
     <div className="allBoard__container">
       <svg display="none">
@@ -80,3 +80,4 @@ const AllBoard = () => {
   );
 };
 export default AllBoard;
+//<BackdropComponent open={true} />

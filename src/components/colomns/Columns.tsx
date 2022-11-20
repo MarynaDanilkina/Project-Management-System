@@ -12,8 +12,8 @@ const Columns = () => {
 
   return (
     <div className="Boards__container">
-      {boards.columns.map((board) => (
-        <Colomn board={board} key={board.id} />
+      {boards.columns.map((board, index) => (
+        <Colomn board={board} key={board.id} index={index} />
       ))}
     </div>
   );
