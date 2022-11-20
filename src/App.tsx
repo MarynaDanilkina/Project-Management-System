@@ -21,6 +21,7 @@ function App() {
     dispatch(updateToken(token));
     dispatch(fetchUserData(token));
   }
+
   return (
     <>
       <Header />

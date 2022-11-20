@@ -8,27 +8,29 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 type EditTaskModalProps = {
   titleError: boolean;
-  selectedValue: string;
+  selectDefaultValue: string;
   selectValues: string[];
-  defaultValue: string;
-  titleRef: React.RefObject<HTMLInputElement>;
-  selectRef: React.RefObject<HTMLSelectElement>;
+  descreptionDefaultValue: string;
   onFocus: () => void;
+  getRefs: () => {
+    inputRef: React.RefObject<HTMLInputElement>;
+    selectRef: React.RefObject<HTMLSelectElement>;
+  };
 };
 
 export default function EditTaskModal({
   onClose,
   onOk,
-  defaultValue,
+  descreptionDefaultValue,
   isModalOpen,
   title,
-  selectedValue,
+  selectDefaultValue,
   selectValues,
-  titleRef,
-  selectRef,
   titleError,
   onFocus,
+  getRefs,
 }: DialogWindowProps & EditTaskModalProps) {
+  const { inputRef, selectRef } = getRefs();
   return (
     <>
       <CustomFormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
@@ -37,8 +39,8 @@ export default function EditTaskModal({
             <TextField
               autoFocus
               margin="dense"
-              inputRef={titleRef}
-              defaultValue={defaultValue}
+              inputRef={inputRef}
+              defaultValue={descreptionDefaultValue}
               onFocus={onFocus}
               id="edit-task__input"
               label="Descreption"
@@ -53,7 +55,7 @@ export default function EditTaskModal({
               <Select
                 labelId="demo-simple-select-label"
                 id="select-for"
-                value={selectedValue}
+                defaultValue={selectDefaultValue}
                 label="For"
                 inputRef={selectRef}
               >

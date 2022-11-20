@@ -12,39 +12,42 @@ type EditBoardOrAddBoardOrAddTaskDialogWindowProps = {
   titleInputID: string;
   descreptionInputID: string;
   onFocus: () => void;
+  getRefs: () => {
+    inputRefTitle: React.RefObject<HTMLInputElement>;
+    inputRefDescreption: React.RefObject<HTMLSelectElement>;
+  };
 };
 
-export default function EditBoardOrAddBoardOrAddTaskDialogWindow({
-  onClose,
-  onOk,
-  isModalOpen,
-  title,
-  titleLabel,
-  descreptionLabel,
-  titleInputID,
-  descreptionInputID,
-  titleError,
-  onFocus,
-}: DialogWindowProps & EditBoardOrAddBoardOrAddTaskDialogWindowProps) {
+const EditBoardOrAddBoardOrAddTaskDialogWindow = (
+  props: EditBoardOrAddBoardOrAddTaskDialogWindowProps & DialogWindowProps
+) => {
+  const { inputRefTitle, inputRefDescreption } = props.getRefs();
   return (
     <>
-      <CustomFormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
+      <CustomFormControl
+        title={props.title}
+        onClose={props.onClose}
+        onOk={props.onOk}
+        isModalOpen={props.isModalOpen}
+      >
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            id={titleInputID}
-            label={titleLabel}
+            id={props.titleInputID}
+            label={props.titleLabel}
             type="text"
             fullWidth
             variant="outlined"
-            error={titleError}
-            onFocus={onFocus}
+            error={props.titleError}
+            onFocus={props.onFocus}
+            inputRef={inputRefTitle}
           />
           <TextField
             margin="dense"
-            id={descreptionInputID}
-            label={descreptionLabel}
+            inputRef={inputRefDescreption}
+            id={props.descreptionInputID}
+            label={props.descreptionLabel}
             type="text"
             fullWidth
             variant="outlined"
@@ -55,4 +58,6 @@ export default function EditBoardOrAddBoardOrAddTaskDialogWindow({
       </CustomFormControl>
     </>
   );
-}
+};
+
+export default EditBoardOrAddBoardOrAddTaskDialogWindow;
