@@ -20,7 +20,7 @@ const BoardId = () => {
   }, []);
   const { boards } = useAppSelector((state) => state.boards);
   useEffect(() => {
-    console.log(boards);
+    //console.log(boards);
   }, [boards]);
   return (
     <div className="Board__container">
