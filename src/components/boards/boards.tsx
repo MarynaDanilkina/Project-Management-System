@@ -1,4 +1,4 @@
-import { fetchgetAllBoards } from 'api/boardsApi';
+import { fetchAllBoards } from 'api/boardsApi';
 import Board from 'components/board/board';
 import { useAppDispatch, useAppSelector } from 'interface/interface';
 import React, { useEffect } from 'react';
@@ -11,14 +11,14 @@ const Boards = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchgetAllBoards(token));
-  }, []);
+    dispatch(fetchAllBoards(token));
+  }, [dispatch]);
 
-  const { Allboards } = useAppSelector((state) => state.boards);
+  const { AllBoards } = useAppSelector((state) => state.boards);
 
   return (
     <div className="allBoard__container">
-      {Allboards.map((board) => (
+      {AllBoards.map((board) => (
         <Link key={board.id} to={`/board/${board.id}`}>
           <Board board={board} key={board.id} />
         </Link>

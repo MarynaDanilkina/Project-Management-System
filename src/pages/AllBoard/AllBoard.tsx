@@ -86,7 +86,7 @@ const AllBoard = () => {
             + Создать
           </button>
         </div>
-        <div className="allBoards__container">
+        <div className="AllBoards__container">
           <Boards />
         </div>
       </div>

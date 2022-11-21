@@ -23,7 +23,7 @@ const EditBoardOrAddBoardOrAddTaskDialogWindow = (
 ) => {
   const { inputRefTitle, inputRefDescription } = props.getRefs();
   return (
-    <>
+    <div onClick={(e) => e.preventDefault()}>
       <CustomFormControl
         title={props.title}
         onClose={props.onClose}
@@ -56,7 +56,7 @@ const EditBoardOrAddBoardOrAddTaskDialogWindow = (
           />
         </DialogContent>
       </CustomFormControl>
-    </>
+    </div>
   );
 };
 
