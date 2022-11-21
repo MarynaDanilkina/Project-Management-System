@@ -3,9 +3,11 @@ import { useAppDispatch, useAppSelector } from 'interface/interface';
 import React from 'react';
 import './Columns.sass';
 import Colomn from '../colomn/colomn';
-export type IBoardProps = {
-  board: IBoardDetailed;
-};
+
+// export type IBoardProps = {
+//   board: IBoardDetailed;
+// };
+
 const Columns = () => {
   const dispatch = useAppDispatch();
   const { boards } = useAppSelector((state) => state.boards);

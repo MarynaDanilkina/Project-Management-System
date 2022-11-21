@@ -46,7 +46,7 @@ const Board = ({ board }: { board: IBoards }) => {
   };
 
   return (
-    <div className="allBoard__bord">
+    <div className="allBoard__board">
       <h3>{board.title}</h3>
       <p>{board.description}</p>
       <div className="allBoard__button-change">

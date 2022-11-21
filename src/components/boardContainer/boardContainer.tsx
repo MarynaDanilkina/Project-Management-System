@@ -5,6 +5,7 @@ import Addcolumn from '../button_addColimn/Addcolumn';
 
 const BoardContainer = () => {
   const { boards } = useAppSelector((state) => state.boards);
+
   return (
     <div className="Board__tasks">
       {boards.columns && boards.columns.length !== 0 ? <Columns /> : null}
