@@ -27,10 +27,10 @@ const Board = ({ board }: IBoardsProps) => {
           className="allBoard__svg"
           onClick={() => updateBoards(title, description, token, board.id)}
         >
-          <use xlinkHref="#bord-change"></use>
+          <use xlinkHref="#board-change"></use>
         </svg>
         <svg className="allBoard__svg" onClick={() => deleteBoards(board.id)}>
-          <use xlinkHref="#bord-delete"></use>
+          <use xlinkHref="#board-delete"></use>
         </svg>
       </div>
     </div>
