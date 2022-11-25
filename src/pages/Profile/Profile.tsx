@@ -16,8 +16,10 @@ import Backdrop from 'components/backdrop';
 import { useNavigate } from 'react-router-dom';
 import fetchUpdateThunk from 'toolkitRedux/userSlice/fetchUpdateThunk';
 import { Alert, Grid } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const Profile = () => {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -73,15 +75,25 @@ const Profile = () => {
           <ProfileInfo name={user?.name ?? ''} login={user?.login ?? ''} />
           <div className="profile__form-container">
             <div className="profile__form-wrapper">
-              <h2>Редактировать профиль</h2>
+              <h2>{t('edit_profile')}</h2>
               <form className="profile__forms" onSubmit={handleSubmit(onSubmit)}>
                 <div className="profile__forms-container">
-                  <TextInput register={register} name="name" label="Имя" error={errors?.name} />
-                  <TextInput register={register} name="login" label="Логин" error={errors?.login} />
+                  <TextInput
+                    register={register}
+                    name="name"
+                    label={t('name')}
+                    error={errors?.name}
+                  />
+                  <TextInput
+                    register={register}
+                    name="login"
+                    label={t('login')}
+                    error={errors?.login}
+                  />
                   <TextInput
                     register={register}
                     name="password"
-                    label="Пароль"
+                    label={t('password')}
                     type="password"
                     error={errors?.password}
                   />
@@ -91,7 +103,7 @@ const Profile = () => {
                       type="submit"
                       disabled={Object.keys(errors).length !== 0}
                     >
-                      Сохранить
+                      {t('ok')}
                     </button>
                   </div>
                 </div>
@@ -100,7 +112,7 @@ const Profile = () => {
           </div>
           <div className="profile__delete-container">
             <button className="profile__form-delete" onClick={toggleIsModalOpen}>
-              Удалить аккаунт
+              {t('remove_profile')}
             </button>
           </div>
         </div>
@@ -120,4 +132,5 @@ const Profile = () => {
     </>
   );
 };
+
 export default Profile;

@@ -14,8 +14,10 @@ import { useNavigate } from 'react-router-dom';
 import { cleanError, selectError, selectIsLoading } from 'toolkitRedux/userSlice/userSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Backdrop from 'components/backdrop';
+import { useTranslation } from 'react-i18next';
 
 const SignUp = () => {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -57,16 +59,16 @@ const SignUp = () => {
 
       <Grid sx={{ jusctifyContent: 'center' }}>
         <Typography variant="h3" component="h1" textAlign="center" mt="2rem" mb="3rem">
-          Создать новый аккаунт
+          {t('create_new_acc')}
         </Typography>
         <form className="profile__forms" onSubmit={handleSubmit(onSubmit)}>
           <div className="profile__forms-container">
-            <TextInput register={register} name="name" label="Имя" error={errors?.name} />
-            <TextInput register={register} name="login" label="Логин" error={errors?.login} />
+            <TextInput register={register} name="name" label={t('name')} error={errors?.name} />
+            <TextInput register={register} name="login" label={t('login')} error={errors?.login} />
             <TextInput
               register={register}
               name="password"
-              label="Пароль"
+              label={t('password')}
               type="password"
               error={errors?.password}
             />
@@ -78,7 +80,7 @@ const SignUp = () => {
                   sx={{ width: '250px', height: '3rem', my: '2rem', justifySelf: 'center' }}
                   disabled={Object.keys(errors).length !== 0 && !authorizationError}
                 >
-                  Регистрация
+                  {t('registration')}
                 </Button>
               </ThemeProvider>
             </Grid>

@@ -3,11 +3,13 @@ import ModalForEditBoard from '../editBoardOrAddBoardOrAddTaskDialogWindow';
 import ModalForConfirm from '../confirmDialogWindow';
 import { IBoards, useAppDispatch } from 'interface/interface';
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
 
 const Board = ({ board }: { board: IBoards }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [modalConfirm, setModalConfirm] = useState(false);
@@ -16,7 +18,7 @@ const Board = ({ board }: { board: IBoards }) => {
   const inputRefDescription = useRef<HTMLSelectElement>(null!);
 
   const getRefs = () => ({ inputRefTitle, inputRefDescription });
-  const modalConfirmTitle = `Вы уверены, что хотите удалить доску "${board.title}"?`;
+  const modalConfirmTitle = `${t('delete_board_warning')} "${board.title}"?`;
 
   const openCloseConfirmModal = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -65,8 +67,8 @@ const Board = ({ board }: { board: IBoards }) => {
       />
       <ModalForEditBoard
         titleError={true}
-        titleLabel="Название: "
-        descriptionLabel="Описание: "
+        titleLabel={t('title')}
+        descriptionLabel={t('description')}
         titleInputID="1"
         descriptionInputID="2"
         onFocus={() => {}}

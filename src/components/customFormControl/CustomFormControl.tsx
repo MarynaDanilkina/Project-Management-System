@@ -4,6 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export type DialogWindowProps = {
   onClose: () => void;
@@ -21,6 +22,8 @@ export default function CustomFormControl({
   onOk,
   children,
 }: DialogWindowProps & FormControlProps) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Dialog open={isModalOpen} onClose={onClose}>
@@ -40,7 +43,7 @@ export default function CustomFormControl({
               color="error"
               onClick={onClose}
             >
-              Cancel
+              {t('cancel')}
             </Button>
             <Button
               sx={{
@@ -50,7 +53,7 @@ export default function CustomFormControl({
               color="success"
               onClick={onOk}
             >
-              Okey
+              {t('ok')}
             </Button>
           </DialogActions>
         </Box>
