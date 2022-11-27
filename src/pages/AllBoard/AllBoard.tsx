@@ -8,11 +8,13 @@ import './AllBoard.sass';
 // Other
 import { fetchCreateBoard } from 'api/boardsApi';
 import { useAppDispatch } from 'interface/interface';
+import { useTranslation } from 'react-i18next';
 
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
 
 const AllBoard = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -81,9 +83,9 @@ const AllBoard = () => {
       </svg>
       <div className="allBoard__wrapper">
         <div className="allBoard__link">
-          <h2>Ваши доски</h2>
+          <h2>{t('your_boards')}</h2>
           <button className="allBoard__button-add" onClick={() => setModalOpen(true)}>
-            + Создать
+            + {t('add')}
           </button>
         </div>
         <div className="AllBoards__container">
@@ -92,8 +94,8 @@ const AllBoard = () => {
       </div>
       <ModalForCreateDesk
         titleError={true}
-        titleLabel="Название: "
-        descriptionLabel="Описание: "
+        titleLabel={t('title')}
+        descriptionLabel={t('description')}
         titleInputID="1"
         descriptionInputID="2"
         onFocus={() => {}}
