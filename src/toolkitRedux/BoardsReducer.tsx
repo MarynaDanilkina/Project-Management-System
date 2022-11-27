@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   fetchCreateBoard,
   fetchDeleteBoard,
-  fetchgetAllBoards,
+  fetchAllBoards,
   fetchGetBoardById,
   fetchUpdateBoard,
   IBoard,
@@ -12,11 +12,11 @@ import { IBoardDetailed, Task } from 'api/contracts';
 import { fetchCreateTask } from 'api/tasksApi';
 export type IInitialStateBoards = {
   boards: IBoardDetailed;
-  Allboards: IBoard[];
+  AllBoards: IBoard[];
 };
 export const initialState: IInitialStateBoards = {
   boards: {} as IBoardDetailed,
-  Allboards: [],
+  AllBoards: [],
 };
 
 export const reduserSlice = createSlice({
@@ -25,19 +25,19 @@ export const reduserSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchgetAllBoards.fulfilled, (state, action) => {
-        state.Allboards = action.payload;
+      .addCase(fetchAllBoards.fulfilled, (state, action) => {
+        state.AllBoards = action.payload;
       })
       .addCase(fetchDeleteBoard.fulfilled, (state, action) => {
-        state.Allboards = state.Allboards.filter((boards) => boards.id !== action.payload);
+        state.AllBoards = state.AllBoards.filter((boards) => boards.id !== action.payload);
       })
       .addCase(fetchCreateBoard.fulfilled, (state, action) => {
-        state.Allboards = [...state.Allboards, action.payload];
+        state.AllBoards = [...state.AllBoards, action.payload];
       })
       .addCase(fetchUpdateBoard.fulfilled, (state, action) => {
         const { id, title, description } = action.payload;
         const newBoard = { id, title, description };
-        state.Allboards = state.Allboards.map((boards) =>
+        state.AllBoards = state.AllBoards.map((boards) =>
           boards.id === action.payload.id ? newBoard : boards
         );
       })

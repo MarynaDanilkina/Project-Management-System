@@ -9,8 +9,8 @@ export default function ConfirmDialogWindow({
   isModalOpen,
 }: DialogWindowProps) {
   return (
-    <>
+    <div onClick={(e: React.MouseEvent) => e.preventDefault()}>
       <FormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen} />
-    </>
+    </div>
   );
 }

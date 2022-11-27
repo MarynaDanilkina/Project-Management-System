@@ -2,10 +2,8 @@ import { Column } from 'api/contracts';
 import AddTask from 'components/button_addTask/addTask';
 import TaskCompon from 'components/task/task';
 import React from 'react';
-export type IBoardProps = {
-  board: Column;
-};
-const Colomn = ({ board }: IBoardProps) => {
+
+const Colomn = ({ board }: { board: Column }) => {
   return (
     <div className="Board__column">
       <h3>{board.title}</h3>
@@ -18,4 +16,5 @@ const Colomn = ({ board }: IBoardProps) => {
     </div>
   );
 };
+
 export default Colomn;

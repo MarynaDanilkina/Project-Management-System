@@ -8,22 +8,22 @@ import CustomFormControl, {
 type EditBoardOrAddBoardOrAddTaskDialogWindowProps = {
   titleError: boolean;
   titleLabel: string;
-  descreptionLabel: string;
+  descriptionLabel: string;
   titleInputID: string;
-  descreptionInputID: string;
+  descriptionInputID: string;
   onFocus: () => void;
   getRefs: () => {
     inputRefTitle: React.RefObject<HTMLInputElement>;
-    inputRefDescreption: React.RefObject<HTMLSelectElement>;
+    inputRefDescription: React.RefObject<HTMLSelectElement>;
   };
 };
 
 const EditBoardOrAddBoardOrAddTaskDialogWindow = (
   props: EditBoardOrAddBoardOrAddTaskDialogWindowProps & DialogWindowProps
 ) => {
-  const { inputRefTitle, inputRefDescreption } = props.getRefs();
+  const { inputRefTitle, inputRefDescription } = props.getRefs();
   return (
-    <>
+    <div onClick={(e) => e.preventDefault()}>
       <CustomFormControl
         title={props.title}
         onClose={props.onClose}
@@ -45,9 +45,9 @@ const EditBoardOrAddBoardOrAddTaskDialogWindow = (
           />
           <TextField
             margin="dense"
-            inputRef={inputRefDescreption}
-            id={props.descreptionInputID}
-            label={props.descreptionLabel}
+            inputRef={inputRefDescription}
+            id={props.descriptionInputID}
+            label={props.descriptionLabel}
             type="text"
             fullWidth
             variant="outlined"
@@ -56,7 +56,7 @@ const EditBoardOrAddBoardOrAddTaskDialogWindow = (
           />
         </DialogContent>
       </CustomFormControl>
-    </>
+    </div>
   );
 };
 
