@@ -10,7 +10,7 @@ type EditTaskModalProps = {
   titleError: boolean;
   selectDefaultValue: string;
   selectValues: string[];
-  descreptionDefaultValue: string;
+  descriptionDefaultValue: string;
   onFocus: () => void;
   getRefs: () => {
     inputRef: React.RefObject<HTMLInputElement>;
@@ -21,9 +21,8 @@ type EditTaskModalProps = {
 export default function EditTaskModal({
   onClose,
   onOk,
-  descreptionDefaultValue,
+  descriptionDefaultValue,
   isModalOpen,
-  title,
   selectDefaultValue,
   selectValues,
   titleError,
@@ -33,29 +32,34 @@ export default function EditTaskModal({
   const { inputRef, selectRef } = getRefs();
   return (
     <>
-      <CustomFormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
+      <CustomFormControl
+        title={'Edit task'}
+        onClose={onClose}
+        onOk={onOk}
+        isModalOpen={isModalOpen}
+      >
         <>
           <DialogContent>
             <TextField
+              inputRef={inputRef}
+              defaultValue={descriptionDefaultValue}
+              onFocus={onFocus}
+              error={titleError}
+              id="edit-task__input"
               autoFocus
               margin="dense"
-              inputRef={inputRef}
-              defaultValue={descreptionDefaultValue}
-              onFocus={onFocus}
-              id="edit-task__input"
-              label="Descreption"
+              label="Description"
               type="text"
               fullWidth
               variant="outlined"
-              error={titleError}
               sx={{ mb: '1rem' }}
             />
             <FormControl fullWidth>
               <InputLabel id="select-for-label">For</InputLabel>
               <Select
+                defaultValue={selectDefaultValue}
                 labelId="demo-simple-select-label"
                 id="select-for"
-                defaultValue={selectDefaultValue}
                 label="For"
                 inputRef={selectRef}
               >

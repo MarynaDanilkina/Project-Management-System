@@ -21,15 +21,15 @@ export default React.forwardRef<HTMLInputElement, DialogWindowProps & AddColumnP
         <CustomFormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
           <DialogContent>
             <TextField
+              error={titleError}
               inputRef={ref}
-              margin="dense"
-              onFocus={onFocus}
-              id="board-title"
               label={t('title')}
+              onFocus={onFocus}
+              margin="dense"
+              id="board-title"
               type="text"
               fullWidth
               variant="outlined"
-              error={titleError}
             />
           </DialogContent>
         </CustomFormControl>

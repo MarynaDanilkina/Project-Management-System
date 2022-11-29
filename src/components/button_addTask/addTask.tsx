@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from 'interface/interface';
 import Modal from '../editBoardOrAddBoardOrAddTaskDialogWindow';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { isInputRefValueEmpty } from '../../pages/AllBoard/AllBoard';
 
 const userId = 'dd398f23-1324-4e5c-95f7-0dd193b5e89f';
 const token =
@@ -15,11 +16,18 @@ const AddTask = ({ board }: { board: Column }) => {
   const { boards } = useAppSelector((state) => state.boards);
 
   const [modal, setModal] = useState(false);
+  const [titleError, setTitleError] = useState(false);
+
   const inputRefTitle = useRef<HTMLInputElement>(null!);
   const inputRefDescription = useRef<HTMLSelectElement>(null!);
+
   const getRefs = () => ({ inputRefTitle, inputRefDescription });
 
+  const updateFormErrors = () => {
+    setTitleError(isInputRefValueEmpty(inputRefTitle));
+  };
   function addTask() {
+    updateFormErrors();
     dispatch(
       fetchCreateTask({
         title: inputRefTitle.current.value,
@@ -39,11 +47,7 @@ const AddTask = ({ board }: { board: Column }) => {
         <p>+ {t('add_task')}</p>
       </div>
       <Modal
-        titleError={true}
-        titleLabel={t('title')}
-        descriptionLabel={t('description')}
-        titleInputID="1"
-        descriptionInputID="2"
+        titleError={titleError}
         onFocus={() => {}}
         getRefs={getRefs}
         onOk={() => addTask()}

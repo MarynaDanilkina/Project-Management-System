@@ -13,16 +13,24 @@ import { useTranslation } from 'react-i18next';
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
 
+export const isInputRefValueEmpty = (inputRef: React.RefObject<HTMLInputElement>) =>
+  inputRef.current?.value !== '';
+
 const AllBoard = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [titleError, setTitleError] = useState(false);
   const inputRefTitle = useRef<HTMLInputElement>(null!);
   const inputRefDescription = useRef<HTMLSelectElement>(null!);
 
   const getRefs = () => ({ inputRefTitle, inputRefDescription });
+  const updateFormErrors = () => {
+    setTitleError(isInputRefValueEmpty(inputRefTitle));
+  };
   const onOk = () => {
+    updateFormErrors();
     dispatch(
       fetchCreateBoard({
         title: inputRefTitle.current.value,
@@ -93,11 +101,7 @@ const AllBoard = () => {
         </div>
       </div>
       <ModalForCreateDesk
-        titleError={true}
-        titleLabel={t('title')}
-        descriptionLabel={t('description')}
-        titleInputID="1"
-        descriptionInputID="2"
+        titleError={titleError}
         onFocus={() => {}}
         getRefs={getRefs}
         onOk={onOk}
