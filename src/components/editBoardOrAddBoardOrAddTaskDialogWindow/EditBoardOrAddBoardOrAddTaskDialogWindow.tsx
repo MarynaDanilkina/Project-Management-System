@@ -14,7 +14,7 @@ type EditBoardOrAddBoardOrAddTaskDialogWindowProps = {
   onDescriptionFocus: () => void;
   inputDefaultTitleValue?: string;
   inputDefaultDescriptionValue?: string;
-  fetchErrorMsg: string;
+  fetchErrorMsg: string | null;
   getRefs: () => {
     inputRefTitle: React.RefObject<HTMLInputElement>;
     inputRefDescription: React.RefObject<HTMLInputElement>;
@@ -73,7 +73,7 @@ const EditBoardOrAddBoardOrAddTaskDialogWindow = ({
         </DialogContent>
       </CustomFormControl>
 
-      {fetchErrorMsg !== '' && (
+      {fetchErrorMsg && (
         <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
           <Alert severity="error" sx={{ fontSize: '1.4rem' }}>
             {fetchErrorMsg}

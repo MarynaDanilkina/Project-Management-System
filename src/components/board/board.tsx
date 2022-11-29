@@ -2,26 +2,26 @@ import { fetchDeleteBoard, fetchUpdateBoard } from 'api/boardsApi';
 import ModalForEditBoard from '../editBoardOrAddBoardOrAddTaskDialogWindow';
 import ModalForConfirm from '../confirmDialogWindow';
 import { IBoards, useAppDispatch } from 'interface/interface';
-import React, { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState } from 'react';
 import { isInputRefValueEmpty } from '../../pages/AllBoard/AllBoard';
-
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
+import useModalLogic from '../../hooks/useModalLogic/useModalLogic';
 
 const Board = ({ board }: { board: IBoards }) => {
-  const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const {
+    token,
+    t,
+    values,
+    updateFetchErrorMessage,
+    closeModal,
+    openModal,
+    resetDescriptionInputError,
+    resetTitleInputError,
+    getRefs,
+    checkRefs,
+  } = useModalLogic();
 
   const [modalConfirm, setModalConfirm] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
-  const [fetchErrorMsg, setFetchErrMsg] = useState('');
-  const [titleError, setTitleError] = useState(false);
-  const [descriptionError, setDescriptionError] = useState(false);
-  const inputRefTitle = useRef<HTMLInputElement>(null!);
-  const inputRefDescription = useRef<HTMLInputElement>(null!);
-
-  const getRefs = () => ({ inputRefTitle, inputRefDescription });
   const modalConfirmTitle = `${t('delete_board_warning')} "${board.title}"?`;
 
   const openCloseConfirmModal = (e: React.MouseEvent) => {
@@ -29,58 +29,53 @@ const Board = ({ board }: { board: IBoards }) => {
     setModalConfirm(true);
   };
 
-  const openCloseEditModal = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setModalEdit(true);
-    setTitleError(false);
-  };
-
   const deleteBoard = () => {
     setModalConfirm(false);
-    dispatch(fetchDeleteBoard({ token, id: board.id }));
-  };
-
-  const onModalEditClose = () => {
-    setTitleError(false);
-    setModalEdit(false);
+    token && dispatch(fetchDeleteBoard({ token, id: board.id }));
   };
 
   const updateBoard = () => {
-    isInputRefValueEmpty(inputRefTitle) ? setTitleError(true) : setTitleError(false);
-    isInputRefValueEmpty(inputRefDescription)
-      ? setDescriptionError(true)
-      : setDescriptionError(false);
-    if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
+    checkRefs();
+    if (
+      !isInputRefValueEmpty(values.inputRefTitle) &&
+      !isInputRefValueEmpty(values.inputRefDescription) &&
+      token
+    ) {
+      if (
+        values.inputRefTitle.current?.value === board.title &&
+        values.inputRefDescription.current?.value === board.description
+      ) {
+        console.log('the same');
+        closeModal();
+        return;
+      }
       dispatch(
         fetchUpdateBoard({
-          title: inputRefTitle.current.value,
-          description: inputRefDescription.current.value,
+          title: values.inputRefTitle.current?.value ?? '',
+          description: values.inputRefDescription.current?.value ?? '',
           token,
           id: board.id,
         })
       )
         .unwrap()
         .then(() => {
-          if (fetchErrorMsg) {
-            setFetchErrMsg('');
-            setModalEdit(false);
-          }
+          closeModal();
         })
-        .catch((err) => setFetchErrMsg(err.message));
+        .catch((err) => updateFetchErrorMessage(err.message));
     }
-  };
-  const onDescriptionInputFocus = () => {
-    setDescriptionError(false);
-  };
-  const onTitleInputFocus = () => {
-    setTitleError(false);
   };
   return (
     <div className="allBoard__board">
       <h3>{board.title}</h3>
       <p>{board.description}</p>
       <div className="allBoard__button-change">
-        <svg className="allBoard__svg" onClick={(e) => openCloseEditModal(e)}>
+        <svg
+          className="allBoard__svg"
+          onClick={(e) => {
+            e.preventDefault();
+            openModal();
+          }}
+        >
           <use xlinkHref="#board-change"></use>
         </svg>
         <svg className="allBoard__svg" onClick={(e) => openCloseConfirmModal(e)}>
@@ -94,17 +89,17 @@ const Board = ({ board }: { board: IBoards }) => {
         title={modalConfirmTitle}
       />
       <ModalForEditBoard
-        fetchErrorMsg={fetchErrorMsg}
-        titleError={titleError}
-        descriptionError={descriptionError}
+        fetchErrorMsg={values?.fetchErrorMsg}
+        titleError={values?.titleError}
+        descriptionError={values?.descriptionError}
         inputDefaultTitleValue={board.title}
         inputDefaultDescriptionValue={board.description}
-        onTitleFocus={onTitleInputFocus}
-        onDescriptionFocus={onDescriptionInputFocus}
+        onTitleFocus={resetTitleInputError}
+        onDescriptionFocus={resetDescriptionInputError}
         getRefs={getRefs}
         onOk={updateBoard}
-        onClose={onModalEditClose}
-        isModalOpen={modalEdit}
+        onClose={closeModal}
+        isModalOpen={values.isModalOpen}
       />
     </div>
   );

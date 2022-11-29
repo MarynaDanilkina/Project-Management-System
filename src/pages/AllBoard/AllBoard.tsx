@@ -7,28 +7,24 @@ import ModalForCreateDesk from '../../components/editBoardOrAddBoardOrAddTaskDia
 import './AllBoard.sass';
 // Other
 import { fetchCreateBoard } from 'api/boardsApi';
-import { useAppDispatch } from 'interface/interface';
+import { useAppDispatch, useAppSelector } from 'interface/interface';
 import { useTranslation } from 'react-i18next';
-
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
+import { selectToken } from '../../toolkitRedux/userSlice/userSlice';
 
 export const isInputRefValueEmpty = (inputRef: React.RefObject<HTMLInputElement>) =>
-  inputRef.current?.value === '';
+  inputRef.current?.value.trim() === '';
 
 const AllBoard = () => {
+  const token = useAppSelector(selectToken);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-
-  const [modalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [fetchErrorMsg, setFetchErrMsg] = useState('');
   const [titleError, setTitleError] = useState(false);
   const [descriptionError, setDescriptionError] = useState(false);
   const inputRefTitle = useRef<HTMLInputElement>(null!);
   const inputRefDescription = useRef<HTMLInputElement>(null!);
-
   const getRefs = () => ({ inputRefTitle, inputRefDescription });
-
   const resetErrors = () => {
     setTitleError(false);
     setDescriptionError(false);
@@ -39,10 +35,9 @@ const AllBoard = () => {
   const onTitleInputFocus = () => {
     setTitleError(false);
   };
-
   const onClose = () => {
     resetErrors();
-    setModalOpen(false);
+    setIsModalOpen(false);
   };
 
   const onOk = () => {
@@ -51,24 +46,28 @@ const AllBoard = () => {
       ? setDescriptionError(true)
       : setDescriptionError(false);
     if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
-      dispatch(
-        fetchCreateBoard({
-          title: inputRefTitle.current.value,
-          description: inputRefDescription.current.value,
-          token,
-        })
-      )
-        .unwrap()
-        .then(() => {
-          if (fetchErrorMsg) {
-            setFetchErrMsg('');
-            setModalOpen(false);
-          }
-        })
-        .catch((err) => setFetchErrMsg(err.message));
-      setModalOpen(false);
+      token &&
+        dispatch(
+          fetchCreateBoard({
+            title: inputRefTitle.current.value,
+            description: inputRefDescription.current.value,
+            token,
+          })
+        )
+          .unwrap()
+          .then(() => {
+            if (fetchErrorMsg) {
+              setFetchErrMsg('');
+              setIsModalOpen(false);
+            }
+          })
+          .catch((err) => {
+            setFetchErrMsg(err.message);
+            setIsModalOpen(false);
+          });
     }
   };
+
   return (
     <div className="allBoard__container">
       <svg display="none">
@@ -120,7 +119,7 @@ const AllBoard = () => {
       <div className="allBoard__wrapper">
         <div className="allBoard__link">
           <h2>{t('your_boards')}</h2>
-          <button className="allBoard__button-add" onClick={() => setModalOpen(true)}>
+          <button className="allBoard__button-add" onClick={() => setIsModalOpen(true)}>
             + {t('add')}
           </button>
         </div>
@@ -137,7 +136,7 @@ const AllBoard = () => {
         getRefs={getRefs}
         onOk={onOk}
         onClose={onClose}
-        isModalOpen={modalOpen}
+        isModalOpen={isModalOpen}
       />
     </div>
   );

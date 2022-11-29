@@ -19,7 +19,10 @@ import { Alert, Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 const Profile = () => {
+  const token = useAppSelector(selectToken);
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+
   const user = useAppSelector(selectUser);
   const {
     register,
@@ -31,8 +34,6 @@ const Profile = () => {
       login: user?.login,
     },
   });
-  const dispatch = useAppDispatch();
-  const token = useAppSelector(selectToken);
   const isLoading = useAppSelector(selectIsLoading);
   const navigate = useNavigate();
   const error = useAppSelector(selectError);

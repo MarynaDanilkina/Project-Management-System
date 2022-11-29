@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next';
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
 
-export const checkRefValueForBeingEpmty = (ref: React.RefObject<HTMLInputElement>) =>
-  ref.current?.value === '';
+export const checkRefValueForBeingEmpty = (ref: React.RefObject<HTMLInputElement>) =>
+  ref.current?.value.trim() === '';
 const Addcolumn = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ const Addcolumn = () => {
   const ref = useRef<HTMLInputElement>(null!);
 
   function AddColumns() {
-    if (checkRefValueForBeingEpmty(ref)) {
+    if (checkRefValueForBeingEmpty(ref)) {
       setTitleError(true);
     } else {
       setModal(false);
