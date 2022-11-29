@@ -24,10 +24,6 @@ const BoardId = () => {
     }
   }, [dispatch, id]);
 
-  useEffect(() => {
-    console.log(boards);
-  }, [boards]);
-
   return (
     <div className="Board__container">
       <div className="Board__wrapper">

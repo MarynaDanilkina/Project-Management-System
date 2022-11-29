@@ -5,24 +5,35 @@ import CustomFormControl, {
   DialogWindowProps,
 } from 'components/customFormControl/CustomFormControl';
 import { useTranslation } from 'react-i18next';
+import { Alert, Grid } from '@mui/material';
 
 type EditBoardOrAddBoardOrAddTaskDialogWindowProps = {
   titleError: boolean;
-  onFocus: () => void;
+  descriptionError: boolean;
+  onTitleFocus: () => void;
+  onDescriptionFocus: () => void;
+  inputDefaultTitleValue?: string;
+  inputDefaultDescriptionValue?: string;
+  fetchErrorMsg: string;
   getRefs: () => {
     inputRefTitle: React.RefObject<HTMLInputElement>;
-    inputRefDescription: React.RefObject<HTMLSelectElement>;
+    inputRefDescription: React.RefObject<HTMLInputElement>;
   };
 };
 
 const EditBoardOrAddBoardOrAddTaskDialogWindow = ({
   title,
-  onFocus,
+  onDescriptionFocus,
+  onTitleFocus,
   onClose,
   onOk,
   getRefs,
   isModalOpen,
   titleError,
+  descriptionError,
+  inputDefaultTitleValue,
+  inputDefaultDescriptionValue,
+  fetchErrorMsg,
 }: EditBoardOrAddBoardOrAddTaskDialogWindowProps & DialogWindowProps) => {
   const { t } = useTranslation();
   const { inputRefTitle, inputRefDescription } = getRefs();
@@ -35,18 +46,22 @@ const EditBoardOrAddBoardOrAddTaskDialogWindow = ({
           <TextField
             error={titleError}
             label={titleLabel}
-            onFocus={onFocus}
+            onFocus={onTitleFocus}
+            inputRef={inputRefTitle}
+            defaultValue={inputDefaultTitleValue ?? ''}
             autoFocus
             margin="dense"
             id="title-input"
             type="text"
             fullWidth
             variant="outlined"
-            inputRef={inputRefTitle}
           />
           <TextField
             inputRef={inputRefDescription}
             label={descriptionLabel}
+            defaultValue={inputDefaultDescriptionValue ?? ''}
+            onFocus={onDescriptionFocus}
+            error={descriptionError}
             multiline={true}
             margin="dense"
             id="description-input"
@@ -57,6 +72,14 @@ const EditBoardOrAddBoardOrAddTaskDialogWindow = ({
           />
         </DialogContent>
       </CustomFormControl>
+
+      {fetchErrorMsg !== '' && (
+        <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
+          <Alert severity="error" sx={{ fontSize: '1.4rem' }}>
+            {fetchErrorMsg}
+          </Alert>
+        </Grid>
+      )}
     </div>
   );
 };

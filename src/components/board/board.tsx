@@ -2,7 +2,7 @@ import { fetchDeleteBoard, fetchUpdateBoard } from 'api/boardsApi';
 import ModalForEditBoard from '../editBoardOrAddBoardOrAddTaskDialogWindow';
 import ModalForConfirm from '../confirmDialogWindow';
 import { IBoards, useAppDispatch } from 'interface/interface';
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isInputRefValueEmpty } from '../../pages/AllBoard/AllBoard';
 
@@ -15,9 +15,11 @@ const Board = ({ board }: { board: IBoards }) => {
 
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
+  const [fetchErrorMsg, setFetchErrMsg] = useState('');
   const [titleError, setTitleError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
   const inputRefTitle = useRef<HTMLInputElement>(null!);
-  const inputRefDescription = useRef<HTMLSelectElement>(null!);
+  const inputRefDescription = useRef<HTMLInputElement>(null!);
 
   const getRefs = () => ({ inputRefTitle, inputRefDescription });
   const modalConfirmTitle = `${t('delete_board_warning')} "${board.title}"?`;
@@ -30,28 +32,49 @@ const Board = ({ board }: { board: IBoards }) => {
   const openCloseEditModal = (e: React.MouseEvent) => {
     e.preventDefault();
     setModalEdit(true);
+    setTitleError(false);
   };
 
   const deleteBoard = () => {
     setModalConfirm(false);
     dispatch(fetchDeleteBoard({ token, id: board.id }));
   };
-  const updateFormErrors = () => {
-    setTitleError(isInputRefValueEmpty(inputRefTitle));
-  };
-  const updateBoard = () => {
+
+  const onModalEditClose = () => {
+    setTitleError(false);
     setModalEdit(false);
-    updateFormErrors();
-    dispatch(
-      fetchUpdateBoard({
-        title: inputRefTitle.current.value,
-        description: inputRefDescription.current.value,
-        token,
-        id: board.id,
-      })
-    );
   };
 
+  const updateBoard = () => {
+    isInputRefValueEmpty(inputRefTitle) ? setTitleError(true) : setTitleError(false);
+    isInputRefValueEmpty(inputRefDescription)
+      ? setDescriptionError(true)
+      : setDescriptionError(false);
+    if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
+      dispatch(
+        fetchUpdateBoard({
+          title: inputRefTitle.current.value,
+          description: inputRefDescription.current.value,
+          token,
+          id: board.id,
+        })
+      )
+        .unwrap()
+        .then(() => {
+          if (fetchErrorMsg) {
+            setFetchErrMsg('');
+            setModalEdit(false);
+          }
+        })
+        .catch((err) => setFetchErrMsg(err.message));
+    }
+  };
+  const onDescriptionInputFocus = () => {
+    setDescriptionError(false);
+  };
+  const onTitleInputFocus = () => {
+    setTitleError(false);
+  };
   return (
     <div className="allBoard__board">
       <h3>{board.title}</h3>
@@ -71,11 +94,16 @@ const Board = ({ board }: { board: IBoards }) => {
         title={modalConfirmTitle}
       />
       <ModalForEditBoard
+        fetchErrorMsg={fetchErrorMsg}
         titleError={titleError}
-        onFocus={() => {}}
+        descriptionError={descriptionError}
+        inputDefaultTitleValue={board.title}
+        inputDefaultDescriptionValue={board.description}
+        onTitleFocus={onTitleInputFocus}
+        onDescriptionFocus={onDescriptionInputFocus}
         getRefs={getRefs}
-        onOk={() => updateBoard()}
-        onClose={() => setModalEdit(false)}
+        onOk={updateBoard}
+        onClose={onModalEditClose}
         isModalOpen={modalEdit}
       />
     </div>

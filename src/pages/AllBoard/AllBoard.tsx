@@ -14,33 +14,61 @@ const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
 
 export const isInputRefValueEmpty = (inputRef: React.RefObject<HTMLInputElement>) =>
-  inputRef.current?.value !== '';
+  inputRef.current?.value === '';
 
 const AllBoard = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [fetchErrorMsg, setFetchErrMsg] = useState('');
   const [titleError, setTitleError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
   const inputRefTitle = useRef<HTMLInputElement>(null!);
-  const inputRefDescription = useRef<HTMLSelectElement>(null!);
+  const inputRefDescription = useRef<HTMLInputElement>(null!);
 
   const getRefs = () => ({ inputRefTitle, inputRefDescription });
-  const updateFormErrors = () => {
-    setTitleError(isInputRefValueEmpty(inputRefTitle));
+
+  const resetErrors = () => {
+    setTitleError(false);
+    setDescriptionError(false);
   };
-  const onOk = () => {
-    updateFormErrors();
-    dispatch(
-      fetchCreateBoard({
-        title: inputRefTitle.current.value,
-        description: inputRefDescription.current.value,
-        token,
-      })
-    );
+  const onDescriptionInputFocus = () => {
+    setDescriptionError(false);
+  };
+  const onTitleInputFocus = () => {
+    setTitleError(false);
+  };
+
+  const onClose = () => {
+    resetErrors();
     setModalOpen(false);
   };
 
+  const onOk = () => {
+    isInputRefValueEmpty(inputRefTitle) ? setTitleError(true) : setTitleError(false);
+    isInputRefValueEmpty(inputRefDescription)
+      ? setDescriptionError(true)
+      : setDescriptionError(false);
+    if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
+      dispatch(
+        fetchCreateBoard({
+          title: inputRefTitle.current.value,
+          description: inputRefDescription.current.value,
+          token,
+        })
+      )
+        .unwrap()
+        .then(() => {
+          if (fetchErrorMsg) {
+            setFetchErrMsg('');
+            setModalOpen(false);
+          }
+        })
+        .catch((err) => setFetchErrMsg(err.message));
+      setModalOpen(false);
+    }
+  };
   return (
     <div className="allBoard__container">
       <svg display="none">
@@ -101,11 +129,14 @@ const AllBoard = () => {
         </div>
       </div>
       <ModalForCreateDesk
+        fetchErrorMsg={fetchErrorMsg}
         titleError={titleError}
-        onFocus={() => {}}
+        descriptionError={descriptionError}
+        onTitleFocus={onTitleInputFocus}
+        onDescriptionFocus={onDescriptionInputFocus}
         getRefs={getRefs}
         onOk={onOk}
-        onClose={() => setModalOpen(false)}
+        onClose={onClose}
         isModalOpen={modalOpen}
       />
     </div>
