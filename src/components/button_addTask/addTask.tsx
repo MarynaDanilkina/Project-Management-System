@@ -4,12 +4,12 @@ import { useAppDispatch, useAppSelector } from 'interface/interface';
 import Modal from '../editBoardOrAddBoardOrAddTaskDialogWindow';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { selectToken } from 'toolkitRedux/userSlice/userSlice';
 
 const userId = 'dd398f23-1324-4e5c-95f7-0dd193b5e89f';
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
 
 const AddTask = ({ board }: { board: Column }) => {
+  const token = useAppSelector(selectToken);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { boards } = useAppSelector((state) => state.boards);
@@ -20,16 +20,17 @@ const AddTask = ({ board }: { board: Column }) => {
   const getRefs = () => ({ inputRefTitle, inputRefDescription });
 
   function addTask() {
-    dispatch(
-      fetchCreateTask({
-        title: inputRefTitle.current.value,
-        description: inputRefDescription.current.value,
-        userId,
-        token,
-        boardId: boards.id,
-        columnId: board.id,
-      })
-    );
+    token &&
+      dispatch(
+        fetchCreateTask({
+          title: inputRefTitle.current.value,
+          description: inputRefDescription.current.value,
+          userId,
+          token,
+          boardId: boards.id,
+          columnId: board.id,
+        })
+      );
     setModal(false);
   }
 
