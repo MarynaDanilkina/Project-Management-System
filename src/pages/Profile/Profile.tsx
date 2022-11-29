@@ -20,12 +20,17 @@ import { useTranslation } from 'react-i18next';
 
 const Profile = () => {
   const { t } = useTranslation();
+  const user = useAppSelector(selectUser);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UserUpDate>();
-  const user = useAppSelector(selectUser);
+  } = useForm<UserUpDate>({
+    defaultValues: {
+      name: user?.name,
+      login: user?.login,
+    },
+  });
   const dispatch = useAppDispatch();
   const token = useAppSelector(selectToken);
   const isLoading = useAppSelector(selectIsLoading);
