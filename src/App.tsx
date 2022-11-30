@@ -12,6 +12,7 @@ import LocalStore from 'utility/localStore/localStore';
 import { useAppDispatch } from 'interface/interface';
 import { updateToken } from 'toolkitRedux/userSlice/userSlice';
 import fetchUserData from 'toolkitRedux/userSlice/fetchUserDataThunk';
+import Svg from 'components/svg/svg';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -35,6 +36,7 @@ function App() {
       </Routes>
 
       <Footer />
+      <Svg />
     </>
   );
 }
