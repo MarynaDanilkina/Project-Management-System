@@ -3,8 +3,10 @@ import ModalForEditBoard from '../editBoardOrAddBoardOrAddTaskDialogWindow';
 import ModalForConfirm from '../confirmDialogWindow';
 import { IBoards, useAppDispatch } from 'interface/interface';
 import React, { useState } from 'react';
-import { isInputRefValueEmpty } from '../../pages/AllBoard/AllBoard';
 import useModalLogic from '../../hooks/useModalLogic/useModalLogic';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { getErrorMessage } from '../../api/apiUtils/utils';
+import isInputRefValueEmpty from '../../utility/localStore/isRefValueEpmty';
 
 const Board = ({ board }: { board: IBoards }) => {
   const dispatch = useAppDispatch();
@@ -34,7 +36,7 @@ const Board = ({ board }: { board: IBoards }) => {
     token && dispatch(fetchDeleteBoard({ token, id: board.id }));
   };
 
-  const updateBoard = () => {
+  const updateBoard = async () => {
     checkRefs();
     if (
       !isInputRefValueEmpty(values.inputRefTitle) &&
@@ -45,23 +47,24 @@ const Board = ({ board }: { board: IBoards }) => {
         values.inputRefTitle.current?.value === board.title &&
         values.inputRefDescription.current?.value === board.description
       ) {
-        console.log('the same');
         closeModal();
         return;
       }
-      dispatch(
-        fetchUpdateBoard({
-          title: values.inputRefTitle.current?.value ?? '',
-          description: values.inputRefDescription.current?.value ?? '',
-          token,
-          id: board.id,
-        })
-      )
-        .unwrap()
-        .then(() => {
-          closeModal();
-        })
-        .catch((err) => updateFetchErrorMessage(err.message));
+
+      try {
+        const result = await dispatch(
+          fetchUpdateBoard({
+            title: values.inputRefTitle.current?.value ?? '',
+            description: values.inputRefDescription.current?.value ?? '',
+            token,
+            id: board.id,
+          })
+        );
+        unwrapResult(result);
+      } catch (err) {
+        closeModal();
+        updateFetchErrorMessage(getErrorMessage(err));
+      }
     }
   };
   return (

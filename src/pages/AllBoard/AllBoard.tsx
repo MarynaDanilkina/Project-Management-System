@@ -10,9 +10,7 @@ import { fetchCreateBoard } from 'api/boardsApi';
 import { useAppDispatch, useAppSelector } from 'interface/interface';
 import { useTranslation } from 'react-i18next';
 import { selectToken } from '../../toolkitRedux/userSlice/userSlice';
-
-export const isInputRefValueEmpty = (inputRef: React.RefObject<HTMLInputElement>) =>
-  inputRef.current?.value.trim() === '';
+import isInputRefValueEmpty from '../../utility/localStore/isRefValueEpmty';
 
 const AllBoard = () => {
   const token = useAppSelector(selectToken);
