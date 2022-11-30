@@ -46,8 +46,8 @@ const AddTask = ({ board }: { board: Column }) => {
           .then(() => {
             if (fetchErrorMsg) {
               setFetchErrMsg('');
-              setModal(false);
             }
+            setModal(false);
           })
           .catch((err) => setFetchErrMsg(err.message));
       setModal(false);
@@ -77,8 +77,6 @@ const AddTask = ({ board }: { board: Column }) => {
       </div>
       <Modal
         fetchErrorMsg={fetchErrorMsg}
-        inputDefaultTitleValue={'title'}
-        inputDefaultDescriptionValue={'descr'}
         titleError={titleError}
         descriptionError={descriptionError}
         onTitleFocus={onTitleInputFocus}

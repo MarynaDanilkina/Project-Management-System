@@ -63,8 +63,8 @@ const Board = ({ board }: { board: IBoards }) => {
         .then(() => {
           if (fetchErrorMsg) {
             setFetchErrMsg('');
-            setModalEdit(false);
           }
+          setModalEdit(false);
         })
         .catch((err) => setFetchErrMsg(err.message));
     }
