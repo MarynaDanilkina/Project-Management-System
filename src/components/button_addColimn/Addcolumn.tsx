@@ -1,22 +1,36 @@
 import { fetchCreateColumn } from 'api/columnsApi';
 import { useAppDispatch, useAppSelector } from 'interface/interface';
 import ModalAddColumn from '../addColumnDialogWindow';
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { selectToken } from 'toolkitRedux/userSlice/userSlice';
 
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
+
+export const checkRefValueForBeingEpmty = (ref: React.RefObject<HTMLInputElement>) =>
+  ref.current?.value === '';
 const Addcolumn = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const token = useAppSelector(selectToken);
   const { boards } = useAppSelector((state) => state.boards);
   const [modal, setModal] = useState(false);
+  const [titleError, setTitleError] = useState(false);
   const ref = useRef<HTMLInputElement>(null!);
 
   function AddColumns() {
-    token && dispatch(fetchCreateColumn({ title: ref.current.value, token, boardId: boards.id }));
-    setModal(false);
+    if (checkRefValueForBeingEpmty(ref)) {
+      setTitleError(true);
+    } else {
+      setModal(false);
+      setTitleError(false);
+      dispatch(fetchCreateColumn({ title: ref.current.value, token, boardId: boards.id }));
+    }
   }
+
+  const onModalClose = () => {
+    setModal(false);
+    setTitleError(false);
+  };
 
   return (
     <div className="Board__Addcolumn">
@@ -24,11 +38,11 @@ const Addcolumn = () => {
         <p>+ {t('add_column')}</p>
       </div>
       <ModalAddColumn
-        onClose={() => setModal(false)}
+        onClose={onModalClose}
         onOk={() => AddColumns()}
-        onFocus={() => {}}
+        onFocus={() => setTitleError(false)}
         isModalOpen={modal}
-        titleError={true}
+        titleError={titleError}
         ref={ref}
       />
     </div>

@@ -4,58 +4,82 @@ import DialogContent from '@mui/material/DialogContent';
 import CustomFormControl, {
   DialogWindowProps,
 } from 'components/customFormControl/CustomFormControl';
+import { useTranslation } from 'react-i18next';
+import { Alert, Grid } from '@mui/material';
 
 type EditBoardOrAddBoardOrAddTaskDialogWindowProps = {
   titleError: boolean;
-  titleLabel: string;
-  descriptionLabel: string;
-  titleInputID: string;
-  descriptionInputID: string;
-  onFocus: () => void;
+  descriptionError: boolean;
+  onTitleFocus: () => void;
+  onDescriptionFocus: () => void;
+  inputDefaultTitleValue?: string;
+  inputDefaultDescriptionValue?: string;
+  fetchErrorMsg: string;
   getRefs: () => {
     inputRefTitle: React.RefObject<HTMLInputElement>;
-    inputRefDescription: React.RefObject<HTMLSelectElement>;
+    inputRefDescription: React.RefObject<HTMLInputElement>;
   };
 };
 
-const EditBoardOrAddBoardOrAddTaskDialogWindow = (
-  props: EditBoardOrAddBoardOrAddTaskDialogWindowProps & DialogWindowProps
-) => {
-  const { inputRefTitle, inputRefDescription } = props.getRefs();
+const EditBoardOrAddBoardOrAddTaskDialogWindow = ({
+  title,
+  onDescriptionFocus,
+  onTitleFocus,
+  onClose,
+  onOk,
+  getRefs,
+  isModalOpen,
+  titleError,
+  descriptionError,
+  inputDefaultTitleValue,
+  inputDefaultDescriptionValue,
+  fetchErrorMsg,
+}: EditBoardOrAddBoardOrAddTaskDialogWindowProps & DialogWindowProps) => {
+  const { t } = useTranslation();
+  const { inputRefTitle, inputRefDescription } = getRefs();
+  const titleLabel = t('title');
+  const descriptionLabel = t('description');
   return (
     <div onClick={(e) => e.preventDefault()}>
-      <CustomFormControl
-        title={props.title}
-        onClose={props.onClose}
-        onOk={props.onOk}
-        isModalOpen={props.isModalOpen}
-      >
+      <CustomFormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
         <DialogContent>
           <TextField
+            error={titleError}
+            label={titleLabel}
+            onFocus={onTitleFocus}
+            inputRef={inputRefTitle}
+            defaultValue={inputDefaultTitleValue ?? ''}
             autoFocus
             margin="dense"
-            id={props.titleInputID}
-            label={props.titleLabel}
+            id="title-input"
             type="text"
             fullWidth
             variant="outlined"
-            error={props.titleError}
-            onFocus={props.onFocus}
-            inputRef={inputRefTitle}
           />
           <TextField
-            margin="dense"
             inputRef={inputRefDescription}
-            id={props.descriptionInputID}
-            label={props.descriptionLabel}
+            label={descriptionLabel}
+            defaultValue={inputDefaultDescriptionValue ?? ''}
+            onFocus={onDescriptionFocus}
+            error={descriptionError}
+            multiline={true}
+            margin="dense"
+            id="description-input"
             type="text"
             fullWidth
             variant="outlined"
-            multiline={true}
             rows={5}
           />
         </DialogContent>
       </CustomFormControl>
+
+      {fetchErrorMsg !== '' && (
+        <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
+          <Alert severity="error" sx={{ fontSize: '1.4rem' }}>
+            {fetchErrorMsg}
+          </Alert>
+        </Grid>
+      )}
     </div>
   );
 };

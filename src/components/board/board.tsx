@@ -1,20 +1,25 @@
 import { fetchDeleteBoard, fetchUpdateBoard } from 'api/boardsApi';
 import ModalForEditBoard from '../editBoardOrAddBoardOrAddTaskDialogWindow';
 import ModalForConfirm from '../confirmDialogWindow';
-import { IBoards, useAppDispatch, useAppSelector } from 'interface/interface';
-import React, { useState, useRef } from 'react';
+import { IBoards, useAppDispatch } from 'interface/interface';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { selectToken } from 'toolkitRedux/userSlice/userSlice';
+import { isInputRefValueEmpty } from '../../pages/AllBoard/AllBoard';
+
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
 
 const Board = ({ board }: { board: IBoards }) => {
-  const token = useAppSelector(selectToken);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
+  const [fetchErrorMsg, setFetchErrMsg] = useState('');
+  const [titleError, setTitleError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
   const inputRefTitle = useRef<HTMLInputElement>(null!);
-  const inputRefDescription = useRef<HTMLSelectElement>(null!);
+  const inputRefDescription = useRef<HTMLInputElement>(null!);
 
   const getRefs = () => ({ inputRefTitle, inputRefDescription });
   const modalConfirmTitle = `${t('delete_board_warning')} "${board.title}"?`;
@@ -27,16 +32,25 @@ const Board = ({ board }: { board: IBoards }) => {
   const openCloseEditModal = (e: React.MouseEvent) => {
     e.preventDefault();
     setModalEdit(true);
+    setTitleError(false);
   };
 
   const deleteBoard = () => {
     setModalConfirm(false);
-    token && dispatch(fetchDeleteBoard({ token, id: board.id }));
+    dispatch(fetchDeleteBoard({ token, id: board.id }));
+  };
+
+  const onModalEditClose = () => {
+    setTitleError(false);
+    setModalEdit(false);
   };
 
   const updateBoard = () => {
-    setModalEdit(false);
-    token &&
+    isInputRefValueEmpty(inputRefTitle) ? setTitleError(true) : setTitleError(false);
+    isInputRefValueEmpty(inputRefDescription)
+      ? setDescriptionError(true)
+      : setDescriptionError(false);
+    if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
       dispatch(
         fetchUpdateBoard({
           title: inputRefTitle.current.value,
@@ -44,9 +58,23 @@ const Board = ({ board }: { board: IBoards }) => {
           token,
           id: board.id,
         })
-      );
+      )
+        .unwrap()
+        .then(() => {
+          if (fetchErrorMsg) {
+            setFetchErrMsg('');
+            setModalEdit(false);
+          }
+        })
+        .catch((err) => setFetchErrMsg(err.message));
+    }
   };
-
+  const onDescriptionInputFocus = () => {
+    setDescriptionError(false);
+  };
+  const onTitleInputFocus = () => {
+    setTitleError(false);
+  };
   return (
     <div className="allBoard__board">
       <h3>{board.title}</h3>
@@ -66,15 +94,16 @@ const Board = ({ board }: { board: IBoards }) => {
         title={modalConfirmTitle}
       />
       <ModalForEditBoard
-        titleError={true}
-        titleLabel={t('title')}
-        descriptionLabel={t('description')}
-        titleInputID="1"
-        descriptionInputID="2"
-        onFocus={() => {}}
+        fetchErrorMsg={fetchErrorMsg}
+        titleError={titleError}
+        descriptionError={descriptionError}
+        inputDefaultTitleValue={board.title}
+        inputDefaultDescriptionValue={board.description}
+        onTitleFocus={onTitleInputFocus}
+        onDescriptionFocus={onDescriptionInputFocus}
         getRefs={getRefs}
-        onOk={() => updateBoard()}
-        onClose={() => setModalEdit(false)}
+        onOk={updateBoard}
+        onClose={onModalEditClose}
         isModalOpen={modalEdit}
       />
     </div>

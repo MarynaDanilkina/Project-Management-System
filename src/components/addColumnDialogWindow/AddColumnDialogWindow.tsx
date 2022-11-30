@@ -5,6 +5,7 @@ import CustomFormControl, {
   DialogWindowProps,
 } from 'components/customFormControl/CustomFormControl';
 import { useTranslation } from 'react-i18next';
+import { Alert, Grid } from '@mui/material';
 
 type AddColumnProps = { titleError: boolean; onFocus: () => void };
 
@@ -21,16 +22,23 @@ export default React.forwardRef<HTMLInputElement, DialogWindowProps & AddColumnP
         <CustomFormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
           <DialogContent>
             <TextField
-              inputRef={ref}
-              margin="dense"
+              error={titleError}
               onFocus={onFocus}
-              id="board-title"
+              inputRef={ref}
               label={t('title')}
+              margin="dense"
+              id="board-title"
               type="text"
               fullWidth
               variant="outlined"
-              error={titleError}
             />
+            {titleError && (
+              <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
+                <Alert severity="error" sx={{ fontSize: '1.4rem' }}>
+                  It should not be empty;
+                </Alert>
+              </Grid>
+            )}
           </DialogContent>
         </CustomFormControl>
       </>
