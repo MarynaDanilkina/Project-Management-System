@@ -38,7 +38,7 @@ const SignIn = () => {
       .then(unwrapResult)
       .then(() => {
         setIsSubmitted(true);
-        navigate('/');
+        navigate('/boards');
       })
       .catch(() => setIsSubmitted(false));
   };
