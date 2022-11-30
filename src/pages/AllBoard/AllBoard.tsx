@@ -7,11 +7,9 @@ import ModalForCreateDesk from '../../components/editBoardOrAddBoardOrAddTaskDia
 import './AllBoard.sass';
 // Other
 import { fetchCreateBoard } from 'api/boardsApi';
-import { useAppDispatch } from 'interface/interface';
+import { useAppDispatch, useAppSelector } from 'interface/interface';
 import { useTranslation } from 'react-i18next';
-
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
+import { selectToken } from '../../toolkitRedux/userSlice/userSlice';
 
 export const isInputRefValueEmpty = (inputRef: React.RefObject<HTMLInputElement>) =>
   inputRef.current?.value === '';
@@ -19,6 +17,7 @@ export const isInputRefValueEmpty = (inputRef: React.RefObject<HTMLInputElement>
 const AllBoard = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const token = useAppSelector(selectToken);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [fetchErrorMsg, setFetchErrMsg] = useState('');
@@ -51,21 +50,22 @@ const AllBoard = () => {
       ? setDescriptionError(true)
       : setDescriptionError(false);
     if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
-      dispatch(
-        fetchCreateBoard({
-          title: inputRefTitle.current.value,
-          description: inputRefDescription.current.value,
-          token,
-        })
-      )
-        .unwrap()
-        .then(() => {
-          if (fetchErrorMsg) {
-            setFetchErrMsg('');
+      token &&
+        dispatch(
+          fetchCreateBoard({
+            title: inputRefTitle.current.value,
+            description: inputRefDescription.current.value,
+            token,
+          })
+        )
+          .unwrap()
+          .then(() => {
+            if (fetchErrorMsg) {
+              setFetchErrMsg('');
+            }
             setModalOpen(false);
-          }
-        })
-        .catch((err) => setFetchErrMsg(err.message));
+          })
+          .catch((err) => setFetchErrMsg(err.message));
       setModalOpen(false);
     }
   };
