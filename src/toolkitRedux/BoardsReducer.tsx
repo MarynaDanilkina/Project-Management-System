@@ -34,6 +34,9 @@ export const reduserSlice = createSlice({
       state.boards.columns[sInd].tasks = items[sInd];
       state.boards.columns[dInd].tasks = items[dInd];
     },
+    addDndcolumn(state, action) {
+      state.boards.columns = action.payload.items;
+    },
   },
   extraReducers: (builder) => {
     builder

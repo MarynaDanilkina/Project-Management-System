@@ -1,25 +1,21 @@
-import { Column } from 'api/contracts';
+import { Column, IBoardDetailed } from 'api/contracts';
 import Columns from 'components/colomns/Columns';
 import { useAppDispatch, useAppSelector } from 'interface/interface';
-import React, { useState } from 'react';
+import React from 'react';
 import { DragDropContext, DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { reduserSlice } from 'toolkitRedux/BoardsReducer';
 import Addcolumn from '../button_addColimn/Addcolumn';
-interface Iresult {
-  x: Ix[];
-}
-type Ix = {
+export interface ITask {
   id: string;
   title: string;
-};
-const reorder = (list: Column, startIndex: number, endIndex: number) => {
+}
+const reorderTask = (list: Column, startIndex: number, endIndex: number) => {
   const result = Array.from(list.tasks);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
-
   return result;
 };
-const move = (
+const moveTask = (
   source: Column,
   destination: Column,
   droppableSource: DraggableLocation,
@@ -27,21 +23,23 @@ const move = (
 ) => {
   const sourceClone = Array.from(source.tasks);
   const destClone = Array.from(destination.tasks);
-  console.log('sourceClone:', sourceClone);
-  console.log('destClone:', destClone);
   const [removed] = sourceClone.splice(droppableSource.index, 1);
   destClone.splice(droppableDestination.index, 0, removed);
-  const result = {} as Iresult[];
-  result[+droppableSource.droppableId].x = sourceClone;
-  result[+droppableDestination.droppableId].x = destClone;
-  console.log(result);
+  const result = {} as ITask[][];
+  result[+droppableSource.droppableId] = sourceClone;
+  result[+droppableDestination.droppableId] = destClone;
+  return result;
+};
+const reorderColumn = (list: IBoardDetailed, startIndex: number, endIndex: number) => {
+  const result = Array.from(list.columns);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
   return result;
 };
 const BoardContainer = () => {
   const dispatch = useAppDispatch();
-  const { addDnd, addDnd2 } = reduserSlice.actions;
+  const { addDnd, addDnd2, addDndcolumn } = reduserSlice.actions;
   const { boards } = useAppSelector((state) => state.boards);
-  const [state, setState] = useState(boards.columns);
   function onDragEnd(result: DropResult) {
     const { source, destination } = result;
     if (!destination) {
@@ -49,12 +47,19 @@ const BoardContainer = () => {
     }
     const sInd = +source.droppableId;
     const dInd = +destination.droppableId;
-    if (sInd === dInd) {
-      const items = reorder(boards.columns[sInd], source.index, destination.index);
-      dispatch(addDnd({ items, sInd }));
-    } else {
-      const items = move(boards.columns[sInd], boards.columns[dInd], source, destination);
-      dispatch(addDnd2({ items, sInd, dInd }));
+    if (result.type === 'task') {
+      if (sInd === dInd) {
+        const items = reorderTask(boards.columns[sInd], source.index, destination.index);
+        dispatch(addDnd({ items, sInd }));
+      } else {
+        const items = moveTask(boards.columns[sInd], boards.columns[dInd], source, destination);
+        dispatch(addDnd2({ items, sInd, dInd }));
+      }
+    }
+    if (result.type === 'column') {
+      const items = reorderColumn(boards, source.index, destination.index);
+      console.log('items:', items);
+      dispatch(addDndcolumn({ items }));
     }
   }
   return (
