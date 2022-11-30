@@ -1,11 +1,8 @@
 .allBoard__container
   background: #F7F6FF
+  height: calc(100vh - 100px - 100px)
+  margin: 20px 0px 0px 20px
   .allBoard__wrapper
-    max-width: 1200px
-    margin: 0px auto
-    padding: 0px 40px
-    padding-top: 50px
-    padding-bottom: 40px
     .allBoard__link
       h2
         font-weight: 500
@@ -29,14 +26,15 @@
   .allBoards__container
     margin-top: 40px
     .allBoard__container
+      height: 100%
+      padding-bottom: 20px
       display: flex
       justify-content: left
-      flex-wrap: wrap
       gap: 10px
+      overflow-y: hidden
       .allBoard__bord
         padding: 10px
         min-width: 204px
-        height: 120px
         background: #FFFFFF
         border: 4px solid #77B2D3
         border-radius: 20px
