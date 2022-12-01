@@ -22,7 +22,22 @@ export const initialState: IInitialStateBoards = {
 export const reduserSlice = createSlice({
   name: 'boards',
   initialState,
-  reducers: {},
+  reducers: {
+    addDnd(state, action) {
+      console.log(action);
+      const { sInd, items } = action.payload;
+      state.boards.columns[sInd].tasks = items;
+    },
+    addDnd2(state, action) {
+      console.log(action);
+      const { items, sInd, dInd } = action.payload;
+      state.boards.columns[sInd].tasks = items[sInd];
+      state.boards.columns[dInd].tasks = items[dInd];
+    },
+    addDndcolumn(state, action) {
+      state.boards.columns = action.payload.items;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllBoards.fulfilled, (state, action) => {

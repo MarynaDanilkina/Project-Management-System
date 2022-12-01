@@ -1,17 +1,15 @@
 import { fetchDeleteBoard, fetchUpdateBoard } from 'api/boardsApi';
 import ModalForEditBoard from '../editBoardOrAddBoardOrAddTaskDialogWindow';
 import ModalForConfirm from '../confirmDialogWindow';
-import { IBoards, useAppDispatch } from 'interface/interface';
+import { IBoards, useAppDispatch, useAppSelector } from 'interface/interface';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isInputRefValueEmpty } from '../../pages/AllBoard/AllBoard';
 
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMjQ4ODM3OS1hMDhjLTQ3YjMtOWNkNi01NjU5Y2JiNzg2NTYiLCJsb2dpbiI6InVzZXIwMDEyMiIsImlhdCI6MTY2ODE2NjcyN30.8ywrrjkBcaLGETqLwbAqwBojiGkbS2PnIS9QtotEUO8';
-
 const Board = ({ board }: { board: IBoards }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { token } = useAppSelector((state) => state.user);
 
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
@@ -37,7 +35,7 @@ const Board = ({ board }: { board: IBoards }) => {
 
   const deleteBoard = () => {
     setModalConfirm(false);
-    dispatch(fetchDeleteBoard({ token, id: board.id }));
+    token && dispatch(fetchDeleteBoard({ token, id: board.id }));
   };
 
   const onModalEditClose = () => {
@@ -51,22 +49,23 @@ const Board = ({ board }: { board: IBoards }) => {
       ? setDescriptionError(true)
       : setDescriptionError(false);
     if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
-      dispatch(
-        fetchUpdateBoard({
-          title: inputRefTitle.current.value,
-          description: inputRefDescription.current.value,
-          token,
-          id: board.id,
-        })
-      )
-        .unwrap()
-        .then(() => {
-          if (fetchErrorMsg) {
-            setFetchErrMsg('');
-          }
-          setModalEdit(false);
-        })
-        .catch((err) => setFetchErrMsg(err.message));
+      token &&
+        dispatch(
+          fetchUpdateBoard({
+            title: inputRefTitle.current.value,
+            description: inputRefDescription.current.value,
+            token,
+            id: board.id,
+          })
+        )
+          .unwrap()
+          .then(() => {
+            if (fetchErrorMsg) {
+              setFetchErrMsg('');
+            }
+            setModalEdit(false);
+          })
+          .catch((err) => setFetchErrMsg(err.message));
     }
   };
   const onDescriptionInputFocus = () => {

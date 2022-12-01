@@ -12,6 +12,7 @@ export const checkRefValueForBeingEpmty = (ref: React.RefObject<HTMLInputElement
 const Addcolumn = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { token } = useAppSelector((state) => state.user);
   const { boards } = useAppSelector((state) => state.boards);
   const [modal, setModal] = useState(false);
   const [titleError, setTitleError] = useState(false);
@@ -23,7 +24,7 @@ const Addcolumn = () => {
     } else {
       setModal(false);
       setTitleError(false);
-      dispatch(fetchCreateColumn({ title: ref.current.value, token, boardId: boards.id }));
+      token && dispatch(fetchCreateColumn({ title: ref.current.value, token, boardId: boards.id }));
     }
   }
 
