@@ -4,6 +4,7 @@ import AllBoard from 'pages/AllBoard/AllBoard';
 import BoardID from 'pages/BoardID/BoardID';
 import SignUp from 'pages/SignUp/SingUp';
 import SignIn from 'pages/SignIn/SignIn';
+import { Error404 } from 'pages/Error404';
 import Profile from 'pages/Profile/Profile';
 import Welcome from 'pages/welcome/welcome';
 import React from 'react';
@@ -33,6 +34,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/boards" element={<AllBoard />} />
         <Route path="/board/:id" element={<BoardID />} />
+        <Route path="*" element={<Error404 />} />
       </Routes>
 
       <Footer />
