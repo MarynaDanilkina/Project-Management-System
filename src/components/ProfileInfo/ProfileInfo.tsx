@@ -1,8 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 type ProfileProps = { name: string; login: string };
 
 const ProfileInfo = ({ name, login }: ProfileProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="profile__info-container">
       <div>
@@ -12,11 +15,11 @@ const ProfileInfo = ({ name, login }: ProfileProps) => {
       </div>
       <div>
         <div className="profile__info-name">
-          <span>Имя:</span>
+          <span>{t('name')}:</span>
           <span className="profile-info">{name}</span>
         </div>
         <div className="profile__info-login">
-          <span>Логин:</span>
+          <span>{t('login')}:</span>
           <span className="profile-info">{login}</span>
         </div>
       </div>

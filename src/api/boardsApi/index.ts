@@ -9,8 +9,8 @@ export interface IBoard {
   title: string;
   description: string;
 }
-export const fetchgetAllBoards = createAsyncThunk(
-  'boards/fetchgetAllBoards',
+export const fetchAllBoards = createAsyncThunk(
+  'boards/fetchAllBoards',
   async (token: string): Promise<IBoard[]> => {
     const response = await makeRequest(BASE_URL + 'boards', 200, makeOptionsWithoutBody(token));
     return response;

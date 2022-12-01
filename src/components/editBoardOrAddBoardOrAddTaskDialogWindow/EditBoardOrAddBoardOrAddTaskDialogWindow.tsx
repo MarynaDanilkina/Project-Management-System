@@ -4,55 +4,84 @@ import DialogContent from '@mui/material/DialogContent';
 import CustomFormControl, {
   DialogWindowProps,
 } from 'components/customFormControl/CustomFormControl';
+import { useTranslation } from 'react-i18next';
+import { Alert, Grid } from '@mui/material';
 
 type EditBoardOrAddBoardOrAddTaskDialogWindowProps = {
   titleError: boolean;
-  titleLabel: string;
-  descreptionLabel: string;
-  titleInputID: string;
-  descreptionInputID: string;
-  onFocus: () => void;
+  descriptionError: boolean;
+  onTitleFocus: () => void;
+  onDescriptionFocus: () => void;
+  inputDefaultTitleValue?: string;
+  inputDefaultDescriptionValue?: string;
+  fetchErrorMsg: string;
+  getRefs: () => {
+    inputRefTitle: React.RefObject<HTMLInputElement>;
+    inputRefDescription: React.RefObject<HTMLInputElement>;
+  };
 };
 
-export default function EditBoardOrAddBoardOrAddTaskDialogWindow({
+const EditBoardOrAddBoardOrAddTaskDialogWindow = ({
+  title,
+  onDescriptionFocus,
+  onTitleFocus,
   onClose,
   onOk,
+  getRefs,
   isModalOpen,
-  title,
-  titleLabel,
-  descreptionLabel,
-  titleInputID,
-  descreptionInputID,
   titleError,
-  onFocus,
-}: DialogWindowProps & EditBoardOrAddBoardOrAddTaskDialogWindowProps) {
+  descriptionError,
+  inputDefaultTitleValue,
+  inputDefaultDescriptionValue,
+  fetchErrorMsg,
+}: EditBoardOrAddBoardOrAddTaskDialogWindowProps & DialogWindowProps) => {
+  const { t } = useTranslation();
+  const { inputRefTitle, inputRefDescription } = getRefs();
+  const titleLabel = t('title');
+  const descriptionLabel = t('description');
   return (
-    <>
+    <div onClick={(e) => e.preventDefault()}>
       <CustomFormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
         <DialogContent>
           <TextField
+            error={titleError}
+            label={titleLabel}
+            onFocus={onTitleFocus}
+            inputRef={inputRefTitle}
+            defaultValue={inputDefaultTitleValue ?? ''}
             autoFocus
             margin="dense"
-            id={titleInputID}
-            label={titleLabel}
+            id="title-input"
             type="text"
             fullWidth
             variant="outlined"
-            error={titleError}
-            onFocus={onFocus}
           />
           <TextField
+            inputRef={inputRefDescription}
+            label={descriptionLabel}
+            defaultValue={inputDefaultDescriptionValue ?? ''}
+            onFocus={onDescriptionFocus}
+            error={descriptionError}
+            multiline={true}
             margin="dense"
-            id={descreptionInputID}
-            label={descreptionLabel}
+            id="description-input"
             type="text"
             fullWidth
             variant="outlined"
-            multiline={true}
             rows={5}
           />
         </DialogContent>
       </CustomFormControl>
-    </>
+
+      {fetchErrorMsg !== '' && (
+        <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
+          <Alert severity="error" sx={{ fontSize: '1.4rem' }}>
+            {fetchErrorMsg}
+          </Alert>
+        </Grid>
+      )}
+    </div>
   );
-}
+};
+
+export default EditBoardOrAddBoardOrAddTaskDialogWindow;

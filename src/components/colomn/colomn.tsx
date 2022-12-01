@@ -50,4 +50,5 @@ const Colomn = ({ board, index, ColomnRef, draggableProps, dragHandleProps }: IB
     </div>
   );
 };
+
 export default Colomn;

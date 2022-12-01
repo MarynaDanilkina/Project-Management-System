@@ -8,52 +8,58 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 type EditTaskModalProps = {
   titleError: boolean;
-  selectedValue: string;
+  selectDefaultValue: string;
   selectValues: string[];
-  defaultValue: string;
-  titleRef: React.RefObject<HTMLInputElement>;
-  selectRef: React.RefObject<HTMLSelectElement>;
+  descriptionDefaultValue: string;
   onFocus: () => void;
+  getRefs: () => {
+    inputRef: React.RefObject<HTMLInputElement>;
+    selectRef: React.RefObject<HTMLSelectElement>;
+  };
 };
 
 export default function EditTaskModal({
   onClose,
   onOk,
-  defaultValue,
+  descriptionDefaultValue,
   isModalOpen,
-  title,
-  selectedValue,
+  selectDefaultValue,
   selectValues,
-  titleRef,
-  selectRef,
   titleError,
   onFocus,
+  getRefs,
 }: DialogWindowProps & EditTaskModalProps) {
+  const { inputRef, selectRef } = getRefs();
   return (
     <>
-      <CustomFormControl title={title} onClose={onClose} onOk={onOk} isModalOpen={isModalOpen}>
+      <CustomFormControl
+        title={'Edit task'}
+        onClose={onClose}
+        onOk={onOk}
+        isModalOpen={isModalOpen}
+      >
         <>
           <DialogContent>
             <TextField
+              inputRef={inputRef}
+              defaultValue={descriptionDefaultValue}
+              onFocus={onFocus}
+              error={titleError}
+              id="edit-task__input"
               autoFocus
               margin="dense"
-              inputRef={titleRef}
-              defaultValue={defaultValue}
-              onFocus={onFocus}
-              id="edit-task__input"
-              label="Descreption"
+              label="Description"
               type="text"
               fullWidth
               variant="outlined"
-              error={titleError}
               sx={{ mb: '1rem' }}
             />
             <FormControl fullWidth>
               <InputLabel id="select-for-label">For</InputLabel>
               <Select
+                defaultValue={selectDefaultValue}
                 labelId="demo-simple-select-label"
                 id="select-for"
-                value={selectedValue}
                 label="For"
                 inputRef={selectRef}
               >

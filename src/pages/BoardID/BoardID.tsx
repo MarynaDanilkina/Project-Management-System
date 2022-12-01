@@ -2,14 +2,17 @@ import { fetchGetBoardById } from 'api/boardsApi';
 import BoardContainer from 'components/boardContainer/boardContainer';
 import { useAppDispatch, useAppSelector } from 'interface/interface';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import './BoardID.sass';
 
 const BoardId = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
+  const { boards } = useAppSelector((state) => state.boards);
+
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
-
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.user);
 
@@ -17,17 +20,14 @@ const BoardId = () => {
     if (id && token) {
       dispatch(fetchGetBoardById({ token, id }));
     }
-  }, []);
-  const { boards } = useAppSelector((state) => state.boards);
-  useEffect(() => {
-    //console.log(boards);
-  }, [boards]);
+  }, [dispatch, id]);
+
   return (
     <div className="Board__container">
       <div className="Board__wrapper">
         <div className="Board__prev">
           <span className="Board__prev-button" onClick={() => goBack()}>
-            Назад
+            {t('go_back')}
           </span>
           <span>/{boards.title}</span>
         </div>

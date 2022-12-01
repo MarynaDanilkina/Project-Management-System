@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'interface/interface';
 import LocalStore from 'utility/localStore/localStore';
+import fetchDeleteUser from './fetchDeleteUser';
 import fetchSignIn from './fetchSignInThunk';
 import fetchSignUp from './fetchSignUpThunk';
+import fetchUpdateThunk from './fetchUpdateThunk';
 import fetchUserData, { UserData } from './fetchUserDataThunk';
 
 export type userSliceState = {
@@ -58,19 +60,11 @@ const userSlice = createSlice({
     builder.addCase(fetchSignUp.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(fetchSignUp.fulfilled, (state, { payload }) => {
-      state.token = payload.token;
+    builder.addCase(fetchSignUp.fulfilled, (state) => {
       state.isLoading = false;
-      state.userData = payload.user;
-      if (state.error) {
-        state.error = null;
-      }
-      localStore.updateValue(payload.token);
     });
     builder.addCase(fetchSignUp.rejected, (state, { error }) => {
-      state.token = null;
       state.isLoading = false;
-      localStore.updateValue(null);
       state.error = error.message ?? 'Something went wrong.';
     });
     builder.addCase(fetchUserData.pending, (state) => {
@@ -83,6 +77,34 @@ const userSlice = createSlice({
     builder.addCase(fetchUserData.rejected, (state) => {
       state.token = null;
       state.isLoading = false;
+      localStore.updateValue(null);
+    });
+    builder.addCase(fetchUpdateThunk.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchUpdateThunk.fulfilled, (state, { payload }) => {
+      state.userData = { userId: payload.userId, name: payload.name, login: payload.login };
+      state.error = null;
+      state.isLoading = false;
+    });
+    builder.addCase(fetchUpdateThunk.rejected, (state, { error }) => {
+      state.isLoading = false;
+      state.error = error.message ?? 'Something wrong';
+    });
+
+    builder.addCase(fetchDeleteUser.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchDeleteUser.rejected, (state, { error }) => {
+      state = getInitialUserState();
+      state.error = error.message ?? 'Something went wrong';
+      localStore.updateValue(null);
+    });
+    builder.addCase(fetchDeleteUser.fulfilled, (state) => {
+      state.token = null;
+      state.isLoading = false;
+      state.userData = null;
+      state.error = null;
       localStore.updateValue(null);
     });
   },
