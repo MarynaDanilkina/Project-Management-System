@@ -21,6 +21,7 @@ interface ITaskResponse {
   userId: string;
 }
 
+// не изменен, нигде не используется
 const getAllTasks = async (token: string, boardId: string, columnId: string): Promise<ITask[]> => {
   const response = await makeRequest(
     `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
@@ -29,47 +30,63 @@ const getAllTasks = async (token: string, boardId: string, columnId: string): Pr
   );
   return response;
 };
+
+type createTaskProps = {
+  boardId: string;
+  columnId: string;
+  title: string;
+  order: number;
+  description: string;
+  userId: number;
+  users: Array<string>;
+  token: string;
+};
+
+const createTask = async (
+  boardId: string,
+  columnId: string,
+  title: string,
+  order: number,
+  description: string,
+  userId: number,
+  users: Array<string>,
+  token: string
+): Promise<ITaskResponse> => {
+  const response = await makeRequest(
+    `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
+    201,
+    makeOptions({ title, order, description, userId, users }, 'POST', token)
+  );
+  return response;
+};
+
 export const fetchCreateTask = createAsyncThunk(
   'task/fetchCreateTask',
   async ({
-    title,
-    description,
-    userId,
-    token,
     boardId,
     columnId,
-  }: {
-    title: string;
-    description: string;
-    userId: string;
-    token: string;
-    boardId: string;
-    columnId: string;
-  }) => {
-    const response = await makeRequest(
-      `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
-      201,
-      makeOptions({ title, description, userId }, 'POST', token)
+    title,
+    order,
+    description,
+    userId,
+    users,
+    token,
+  }: createTaskProps): Promise<ITaskResponse> => {
+    const response = await createTask(
+      boardId,
+      columnId,
+      title,
+      order,
+      description,
+      userId,
+      users,
+      token
     );
-    return { columnId, task: response };
+    return response;
   }
 );
-//const createTask = async (
-//  title: string,
-//  description: string,
-//  id: string,
-//  token: string,
-//  boardId: string,
-//  columnId: string
-//): Promise<ITaskResponse> => {
-//  const response = await makeRequest(
-//    `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
-//    201,
-//    makeOptions({ title, description, id }, 'POST', token)
-//  );
-//  return response;
-//};
 
+// не изменен, нигде не используется
 const getTaskById = async (
   token: string,
   boardId: string,
@@ -84,19 +101,48 @@ const getTaskById = async (
   return response;
 };
 
+type IResponseDeleteTask = {
+  _id: string;
+  title: string;
+  order: number;
+  boardId: string;
+  columnId: string;
+  description: string;
+  userId: string;
+  users: Array<string>;
+};
+
 const deleteTask = async (
-  token: string,
+  taskId: string,
   boardId: string,
   columnId: string,
-  taskId: string
-): Promise<boolean> => {
+  token: string
+): Promise<IResponseDeleteTask> => {
   const response = await makeRequest(
     `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
-    204,
+    200,
     makeOptionsWithoutBody(token, 'DELETE')
   );
   return response;
 };
+
+export const fetchDeleteTask = createAsyncThunk(
+  'task/fetchDeleteTask',
+  async ({
+    taskId,
+    boardId,
+    columnId,
+    token,
+  }: {
+    taskId: string;
+    boardId: string;
+    columnId: string;
+    token: string;
+  }): Promise<IResponseDeleteTask> => {
+    const response = await deleteTask(taskId, boardId, columnId, token);
+    return response;
+  }
+);
 
 const updateTask = async (
   title: string,
@@ -106,21 +152,42 @@ const updateTask = async (
   boardId: string,
   columnId: string,
   taskId: string,
-  userId: string
+  userId: string,
+  users: Array<string>
 ): Promise<{
+  _id: string;
   title: string;
   order: number;
   description: string;
   userId: string;
   boardId: string;
   columnId: string;
+  users: Array<string>;
 }> => {
   const response = await makeRequest(
     `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
     200,
-    makeOptions({ title, order, description, userId, boardId, columnId }, 'PUT', token)
+    makeOptions({ title, order, description, userId, boardId, columnId, users }, 'PUT', token)
   );
   return response;
 };
 
-export { getAllTasks, getTaskById, deleteTask, updateTask };
+export const fetchUpdateTask = createAsyncThunk(
+  'task/fetchUpdateTask',
+  async ({
+    taskId,
+    boardId,
+    columnId,
+    token,
+  }: {
+    taskId: string;
+    boardId: string;
+    columnId: string;
+    token: string;
+  }): Promise<IResponseDeleteTask> => {
+    const response = await deleteTask(taskId, boardId, columnId, token);
+    return response;
+  }
+);
+
+export { getTaskById, deleteTask, updateTask };
