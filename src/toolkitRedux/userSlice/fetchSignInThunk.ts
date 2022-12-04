@@ -7,13 +7,13 @@ import { SignInData } from 'pages/SignIn/SignIn';
 const fetchSignIn = createAsyncThunk('user/signIn', async (userData: SignInData) => {
   try {
     const { token } = await signIn(userData.login, userData.password);
-    const { userId, login } = parseJwt(token);
-    const user = await getUserById(token, userId);
+    const { id, login } = parseJwt(token);
+    const user = await getUserById(token, id);
 
     return {
       token,
       user: {
-        userId,
+        userId: id,
         login,
         name: user.name,
       },

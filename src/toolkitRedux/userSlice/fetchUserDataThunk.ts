@@ -9,13 +9,13 @@ export type UserData = {
 };
 
 const fetchUserData = createAsyncThunk('user/fetchUserData', async (token: string) => {
-  const { userId } = parseJwt(token);
+  const { id } = parseJwt(token);
   try {
-    const user = await getUserById(token, userId);
+    const user = await getUserById(token, id);
     const userData: UserData = {
       name: user.name,
       login: user.login,
-      userId,
+      userId: id,
     };
 
     return userData;

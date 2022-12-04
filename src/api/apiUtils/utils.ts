@@ -1,8 +1,8 @@
-export const BASE_URL = 'https://whispering-mesa-64104.herokuapp.com/';
+export const BASE_URL = 'https://final-task-backend-production-623e.up.railway.app/';
 
 export type ErrorMessage = { statusCode: number; message: string };
 
-export function parseJwt(token: string): { login: string; userId: string } {
+export function parseJwt(token: string): { login: string; id: string } {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(
@@ -14,7 +14,6 @@ export function parseJwt(token: string): { login: string; userId: string } {
       })
       .join('')
   );
-
   return JSON.parse(jsonPayload);
 }
 

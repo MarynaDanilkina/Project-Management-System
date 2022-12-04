@@ -57,7 +57,7 @@ export const fetchCreateTask = createAsyncThunk(
 //const createTask = async (
 //  title: string,
 //  description: string,
-//  userId: string,
+//  id: string,
 //  token: string,
 //  boardId: string,
 //  columnId: string
@@ -65,7 +65,7 @@ export const fetchCreateTask = createAsyncThunk(
 //  const response = await makeRequest(
 //    `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
 //    201,
-//    makeOptions({ title, description, userId }, 'POST', token)
+//    makeOptions({ title, description, id }, 'POST', token)
 //  );
 //  return response;
 //};

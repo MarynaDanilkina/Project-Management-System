@@ -21,7 +21,7 @@ const getUserById = async (token: string, id: string): Promise<IUser> => {
 const deleteUser = async (token: string, id: string): Promise<boolean> => {
   const response = await makeRequest(
     BASE_URL + `users/${id}`,
-    204,
+    200,
     makeOptionsWithoutBody(token, 'DELETE')
   );
   return response;

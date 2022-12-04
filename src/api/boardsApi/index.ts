@@ -33,7 +33,7 @@ export const fetchCreateBoard = createAsyncThunk(
   }): Promise<IBoard> => {
     const response = await makeRequest(
       BASE_URL + 'boards',
-      201,
+      200,
       makeOptions({ title, description }, 'POST', token)
     );
     return response;
