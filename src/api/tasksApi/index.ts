@@ -22,7 +22,11 @@ interface ITaskResponse {
 }
 
 // не изменен, нигде не используется
-const getAllTasks = async (token: string, boardId: string, columnId: string): Promise<ITask[]> => {
+export const getAllTasks = async (
+  token: string,
+  boardId: string,
+  columnId: string
+): Promise<ITask[]> => {
   const response = await makeRequest(
     `${BASE_URL}boards/${boardId}/columns/${columnId}/tasks`,
     200,

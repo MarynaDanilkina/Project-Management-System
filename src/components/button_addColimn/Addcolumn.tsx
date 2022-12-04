@@ -24,7 +24,15 @@ const Addcolumn = () => {
     } else {
       setModal(false);
       setTitleError(false);
-      token && dispatch(fetchCreateColumn({ title: ref.current.value, token, boardId: boards.id }));
+      token &&
+        dispatch(
+          fetchCreateColumn({
+            title: ref.current.value,
+            token,
+            boardId: boards.id,
+            order: 1,
+          })
+        );
     }
   }
 

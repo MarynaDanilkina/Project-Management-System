@@ -28,7 +28,7 @@ const AllBoard = () => {
       token && dispatch(fetchUsersThunk(token));
       console.log('useEffect', token);
     })();
-  }, [token]);
+  }, [dispatch, token]);
 
   const isArgs = () => {
     return !!(token && usersIDs && users && user);

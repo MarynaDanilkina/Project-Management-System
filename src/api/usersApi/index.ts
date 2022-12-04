@@ -15,14 +15,18 @@ const getAllUsers = async (token: string): Promise<IUser[]> => {
   return response;
 };
 
-const getUserById = async (token: string, id: string): Promise<IUser> => {
-  const response = await makeRequest(BASE_URL + `users/${id}`, 200, makeOptionsWithoutBody(token));
+const getUserById = async (token: string, userId: string): Promise<IUser> => {
+  const response = await makeRequest(
+    BASE_URL + `users/${userId}`,
+    200,
+    makeOptionsWithoutBody(token)
+  );
   return response;
 };
 
-const deleteUser = async (token: string, id: string): Promise<boolean> => {
+const deleteUser = async (token: string, userId: string): Promise<boolean> => {
   const response = await makeRequest(
-    BASE_URL + `users/${id}`,
+    BASE_URL + `users/${userId}`,
     200,
     makeOptionsWithoutBody(token, 'DELETE')
   );
@@ -34,10 +38,10 @@ const updateUser = async (
   login: string,
   password: string,
   token: string,
-  id: string
+  userId: string
 ): Promise<IUser> => {
   const response = await makeRequest(
-    BASE_URL + `users/${id}`,
+    BASE_URL + `users/${userId}`,
     200,
     makeOptions({ name, login, password }, 'PUT', token)
   );
