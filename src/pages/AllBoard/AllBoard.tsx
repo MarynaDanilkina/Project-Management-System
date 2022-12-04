@@ -6,7 +6,6 @@ import ModalForCreateDesk from '../../components/editBoardOrAddBoardOrAddTaskDia
 // Style
 import './AllBoard.sass';
 // Other
-import { fetchCreateBoard } from 'api/boardsApi';
 import { useAppDispatch, useAppSelector } from 'interface/interface';
 import { useTranslation } from 'react-i18next';
 import { selectToken } from '../../toolkitRedux/userSlice/userSlice';
@@ -50,6 +49,7 @@ const AllBoard = () => {
       ? setDescriptionError(true)
       : setDescriptionError(false);
     if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
+      /*
       token &&
         dispatch(
           fetchCreateBoard({
@@ -67,6 +67,7 @@ const AllBoard = () => {
           })
           .catch((err) => setFetchErrMsg(err.message));
       setModalOpen(false);
+       */
     }
   };
   return (

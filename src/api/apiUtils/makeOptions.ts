@@ -10,7 +10,7 @@ interface IRequestOptionsWithToken {
 }
 
 const makeOptions = (
-  body: Record<string, string | number>,
+  body: Record<string, string | number | string[]>,
   method = 'POST',
   token?: string
 ): IRequestOptions => {

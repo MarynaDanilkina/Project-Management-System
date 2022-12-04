@@ -6,12 +6,15 @@ import fetchSignIn from './fetchSignInThunk';
 import fetchSignUp from './fetchSignUpThunk';
 import fetchUpdateThunk from './fetchUpdateThunk';
 import fetchUserData, { UserData } from './fetchUserDataThunk';
+import fetchUsersThunk from './fetchUsersThunk';
+import { IUser } from '../../api/usersApi';
 
 export type userSliceState = {
   isLoading: boolean;
   token: string | null;
   error: null | string;
   userData: UserData | null;
+  users: IUser[] | null;
 };
 
 const getInitialUserState = (
@@ -22,6 +25,7 @@ const getInitialUserState = (
   error,
   userData: null,
   isLoading: false,
+  users: null,
 });
 
 const localStore = new LocalStore();
@@ -107,6 +111,19 @@ const userSlice = createSlice({
       state.error = null;
       localStore.updateValue(null);
     });
+    builder.addCase(fetchUsersThunk.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchUsersThunk.rejected, (state, { error }) => {
+      state = getInitialUserState();
+      state.error = error.message ?? 'Something went wrong';
+      localStore.updateValue(null);
+    });
+    builder.addCase(fetchUsersThunk.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = null;
+      state.users = payload;
+    });
   },
 });
 
@@ -115,8 +132,9 @@ export const { cleanError, updateToken } = userSlice.actions;
 const selectToken = (state: RootState) => state.user.token;
 const selectError = (state: RootState) => state.user.error;
 const selectUser = (state: RootState) => state.user.userData;
+const selectUsers = (state: RootState) => state.user.users;
 const selectIsLoading = (state: RootState) => state.user.isLoading;
 
-export { selectToken, selectError, selectUser, selectIsLoading };
+export { selectToken, selectError, selectUser, selectIsLoading, selectUsers };
 
 export default userSlice.reducer;

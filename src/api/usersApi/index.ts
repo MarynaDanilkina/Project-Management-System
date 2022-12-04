@@ -10,6 +10,7 @@ export interface IUser {
 
 const getAllUsers = async (token: string): Promise<IUser[]> => {
   const response = await makeRequest(BASE_URL + 'users', 200, makeOptionsWithoutBody(token));
+  console.log('all users', response);
   return response;
 };
 

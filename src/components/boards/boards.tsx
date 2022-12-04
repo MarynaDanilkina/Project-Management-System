@@ -18,8 +18,8 @@ const Boards = () => {
   return (
     <div className="allBoard__container">
       {AllBoards.map((board) => (
-        <Link key={board.id} to={`/board/${board.id}`}>
-          <Board board={board} key={board.id} />
+        <Link key={board._id} to={`/board/${board._id}`}>
+          <Board board={board} key={board._id} />
         </Link>
       ))}
     </div>

@@ -1,15 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
+  fetchAllBoards,
   fetchCreateBoard,
   fetchDeleteBoard,
-  fetchAllBoards,
   fetchGetBoardById,
   fetchUpdateBoard,
   IBoard,
 } from 'api/boardsApi';
 import { fetchCreateColumn, fetchGetAllColumns } from 'api/columnsApi';
-import { IBoardDetailed, Task } from 'api/contracts';
+import { IBoardDetailed } from 'api/contracts';
 import { fetchCreateTask } from 'api/tasksApi';
+
 export type IInitialStateBoards = {
   boards: IBoardDetailed;
   AllBoards: IBoard[];
@@ -43,17 +44,15 @@ export const reduserSlice = createSlice({
       .addCase(fetchAllBoards.fulfilled, (state, action) => {
         state.AllBoards = action.payload;
       })
-      .addCase(fetchDeleteBoard.fulfilled, (state, action) => {
-        state.AllBoards = state.AllBoards.filter((boards) => boards.id !== action.payload);
+      .addCase(fetchDeleteBoard.fulfilled, (state, { payload }) => {
+        state.AllBoards = state.AllBoards.filter((board) => board._id !== payload);
       })
       .addCase(fetchCreateBoard.fulfilled, (state, action) => {
         state.AllBoards = [...state.AllBoards, action.payload];
       })
-      .addCase(fetchUpdateBoard.fulfilled, (state, action) => {
-        const { id, title, description } = action.payload;
-        const newBoard = { id, title, description };
-        state.AllBoards = state.AllBoards.map((boards) =>
-          boards.id === action.payload.id ? newBoard : boards
+      .addCase(fetchUpdateBoard.fulfilled, (state, { payload }) => {
+        state.AllBoards = state.AllBoards.map((board) =>
+          board._id === payload._id ? payload : board
         );
       })
       .addCase(fetchGetBoardById.fulfilled, (state, action) => {

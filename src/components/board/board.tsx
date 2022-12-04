@@ -1,15 +1,23 @@
-import { fetchDeleteBoard, fetchUpdateBoard } from 'api/boardsApi';
+import { fetchDeleteBoard, fetchUpdateBoard, IBoard } from 'api/boardsApi';
 import ModalForEditBoard from '../editBoardOrAddBoardOrAddTaskDialogWindow';
 import ModalForConfirm from '../confirmDialogWindow';
-import { IBoards, useAppDispatch, useAppSelector } from 'interface/interface';
+import { useAppDispatch, useAppSelector } from 'interface/interface';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isInputRefValueEmpty } from '../../pages/AllBoard/AllBoard';
+import { selectToken, selectUser, selectUsers } from '../../toolkitRedux/userSlice/userSlice';
 
-const Board = ({ board }: { board: IBoards }) => {
+const Board = ({ board }: { board: IBoard }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { token } = useAppSelector((state) => state.user);
+  const token = useAppSelector(selectToken);
+  const users = useAppSelector(selectUsers);
+  const user = useAppSelector(selectUser);
+  const usersIDs = users?.map((user) => user.id);
+
+  const isArgs = () => {
+    return !!(token && usersIDs && users && user);
+  };
 
   const [modalConfirm, setModalConfirm] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
@@ -35,7 +43,7 @@ const Board = ({ board }: { board: IBoards }) => {
 
   const deleteBoard = () => {
     setModalConfirm(false);
-    token && dispatch(fetchDeleteBoard({ token, id: board.id }));
+    token && dispatch(fetchDeleteBoard({ token, id: board._id }));
   };
 
   const onModalEditClose = () => {
@@ -49,13 +57,14 @@ const Board = ({ board }: { board: IBoards }) => {
       ? setDescriptionError(true)
       : setDescriptionError(false);
     if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
-      token &&
+      isArgs() &&
         dispatch(
           fetchUpdateBoard({
             title: inputRefTitle.current.value,
-            description: inputRefDescription.current.value,
-            token,
-            id: board.id,
+            users: usersIDs as string[],
+            token: token as string,
+            _id: board._id,
+            owner: user?.userId as string,
           })
         )
           .unwrap()
@@ -77,7 +86,7 @@ const Board = ({ board }: { board: IBoards }) => {
   return (
     <div className="allBoard__board">
       <h3>{board.title}</h3>
-      <p>{board.description}</p>
+      <p>{board.owner}</p>
       <div className="allBoard__button-change">
         <svg className="allBoard__svg" onClick={(e) => openCloseEditModal(e)}>
           <use xlinkHref="#board-change"></use>
@@ -97,7 +106,7 @@ const Board = ({ board }: { board: IBoards }) => {
         titleError={titleError}
         descriptionError={descriptionError}
         inputDefaultTitleValue={board.title}
-        inputDefaultDescriptionValue={board.description}
+        inputDefaultDescriptionValue={board.owner}
         onTitleFocus={onTitleInputFocus}
         onDescriptionFocus={onDescriptionInputFocus}
         getRefs={getRefs}
