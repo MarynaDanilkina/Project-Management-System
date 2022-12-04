@@ -3,12 +3,13 @@ import makeRequest from 'api/apiUtils/makeRequest';
 import { BASE_URL } from 'api/apiUtils/utils';
 
 export interface IUser {
-  id: string;
+  _id: string;
   name: string;
   login: string;
 }
 
 const getAllUsers = async (token: string): Promise<IUser[]> => {
+  console.log('all users start');
   const response = await makeRequest(BASE_URL + 'users', 200, makeOptionsWithoutBody(token));
   console.log('all users', response);
   return response;

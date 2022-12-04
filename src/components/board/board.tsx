@@ -13,7 +13,7 @@ const Board = ({ board }: { board: IBoard }) => {
   const token = useAppSelector(selectToken);
   const users = useAppSelector(selectUsers);
   const user = useAppSelector(selectUser);
-  const usersIDs = users?.map((user) => user.id);
+  const usersIDs = users?.map((user) => user._id);
 
   const isArgs = () => {
     return !!(token && usersIDs && users && user);
@@ -86,7 +86,7 @@ const Board = ({ board }: { board: IBoard }) => {
   return (
     <div className="allBoard__board">
       <h3>{board.title}</h3>
-      <p>{board.owner}</p>
+      <p>{user?.name}</p>
       <div className="allBoard__button-change">
         <svg className="allBoard__svg" onClick={(e) => openCloseEditModal(e)}>
           <use xlinkHref="#board-change"></use>

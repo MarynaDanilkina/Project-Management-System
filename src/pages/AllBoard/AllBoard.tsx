@@ -1,14 +1,16 @@
 // Library
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // Components
 import Boards from 'components/boards/boards';
-import ModalForCreateDesk from '../../components/editBoardOrAddBoardOrAddTaskDialogWindow';
+import ModalForCreateDesk from '../../components/createBoardDialog';
 // Style
 import './AllBoard.sass';
 // Other
 import { useAppDispatch, useAppSelector } from 'interface/interface';
 import { useTranslation } from 'react-i18next';
-import { selectToken } from '../../toolkitRedux/userSlice/userSlice';
+import { selectToken, selectUser, selectUsers } from '../../toolkitRedux/userSlice/userSlice';
+import { fetchCreateBoard } from '../../api/boardsApi';
+import fetchUsersThunk from '../../toolkitRedux/userSlice/fetchUsersThunk';
 
 export const isInputRefValueEmpty = (inputRef: React.RefObject<HTMLInputElement>) =>
   inputRef.current?.value === '';
@@ -17,15 +19,29 @@ const AllBoard = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const token = useAppSelector(selectToken);
+  const users = useAppSelector(selectUsers);
+  const user = useAppSelector(selectUser);
+  const usersIDs = users?.map((user) => user._id);
 
+  useEffect(() => {
+    (async () => {
+      token && dispatch(fetchUsersThunk(token));
+      console.log('useEffect', token);
+    })();
+  }, [token]);
+
+  const isArgs = () => {
+    return !!(token && usersIDs && users && user);
+  };
   const [modalOpen, setModalOpen] = useState(false);
   const [fetchErrorMsg, setFetchErrMsg] = useState('');
   const [titleError, setTitleError] = useState(false);
   const [descriptionError, setDescriptionError] = useState(false);
-  const inputRefTitle = useRef<HTMLInputElement>(null!);
-  const inputRefDescription = useRef<HTMLInputElement>(null!);
 
-  const getRefs = () => ({ inputRefTitle, inputRefDescription });
+  const inputRef = useRef<HTMLInputElement>(null!);
+  const selectRef = useRef<HTMLSelectElement>(null!);
+
+  const getRefs = () => ({ inputRef, selectRef });
 
   const resetErrors = () => {
     setTitleError(false);
@@ -44,17 +60,14 @@ const AllBoard = () => {
   };
 
   const onOk = () => {
-    isInputRefValueEmpty(inputRefTitle) ? setTitleError(true) : setTitleError(false);
-    isInputRefValueEmpty(inputRefDescription)
-      ? setDescriptionError(true)
-      : setDescriptionError(false);
-    if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
-      /*
+    isInputRefValueEmpty(inputRef) ? setTitleError(true) : setTitleError(false);
+    if (!isInputRefValueEmpty(inputRef)) {
       token &&
         dispatch(
           fetchCreateBoard({
-            title: inputRefTitle.current.value,
-            description: inputRefDescription.current.value,
+            title: inputRef.current.value,
+            users: usersIDs as string[],
+            owner: user?.userId as string,
             token,
           })
         )
@@ -67,7 +80,6 @@ const AllBoard = () => {
           })
           .catch((err) => setFetchErrMsg(err.message));
       setModalOpen(false);
-       */
     }
   };
   return (
@@ -86,9 +98,9 @@ const AllBoard = () => {
       <ModalForCreateDesk
         fetchErrorMsg={fetchErrorMsg}
         titleError={titleError}
-        descriptionError={descriptionError}
+        owner={user?.userId ?? ''}
+        users={users}
         onTitleFocus={onTitleInputFocus}
-        onDescriptionFocus={onDescriptionInputFocus}
         getRefs={getRefs}
         onOk={onOk}
         onClose={onClose}

@@ -46,7 +46,7 @@ const createBoard = async ({
 
 export const fetchCreateBoard = createAsyncThunk(
   'boards/fetchCreateBoard',
-  async ({ title, users, owner, token }: FetchBoardParams): Promise<IBoard> => {
+  async ({ title, users, owner, token }: Omit<FetchBoardParams, '_id'>): Promise<IBoard> => {
     const response = await createBoard({ title, users, owner, token });
     return response;
   }

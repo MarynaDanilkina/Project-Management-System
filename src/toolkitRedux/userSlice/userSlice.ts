@@ -112,14 +112,17 @@ const userSlice = createSlice({
       localStore.updateValue(null);
     });
     builder.addCase(fetchUsersThunk.pending, (state) => {
+      console.log('usersSlice thunk pending');
       state.isLoading = true;
     });
     builder.addCase(fetchUsersThunk.rejected, (state, { error }) => {
+      console.log('usersSlice thunk rejected, error: ', error);
       state = getInitialUserState();
       state.error = error.message ?? 'Something went wrong';
       localStore.updateValue(null);
     });
     builder.addCase(fetchUsersThunk.fulfilled, (state, { payload }) => {
+      console.log('usersSlise thunk fullfilled, payload: ', payload);
       state.isLoading = false;
       state.error = null;
       state.users = payload;
