@@ -7,6 +7,8 @@
     "profile": "Profile",
     "home_page": "Home page",
     "delete_board_warning": "Are you sure that you want to delete the board",
+    "delete_column_warning": "Are you sure that you want to delete the column",
+    "delete_task_warning": "Are you sure that you want to delete the task",
     "title": "Title",
     "description": "Description",
     "add_column": "Add column",

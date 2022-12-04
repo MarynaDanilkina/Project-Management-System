@@ -7,6 +7,8 @@
     "profile": "Профиль",
     "home_page": "На главную",
     "delete_board_warning": "Вы уверены, что хотите удалить доску",
+    "delete_column_warning": "Вы уверены, что хотите удалить колонку",
+    "delete_task_warning": "Вы уверены, что хотите удалить задачу",
     "title": "Название",
     "description": "Описание",
     "add_column": "Добавить колонку",
