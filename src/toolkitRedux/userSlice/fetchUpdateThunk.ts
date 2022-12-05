@@ -21,7 +21,6 @@ const fetchUpdateThunk = createAsyncThunk(
       };
       return userData;
     } catch (err) {
-      console.log(err);
       const errMsg = getErrorMessage(err);
       throw errMsg;
     }

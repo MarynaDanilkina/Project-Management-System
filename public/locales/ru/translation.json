@@ -29,7 +29,7 @@
     "start": "Начать",
     "main_page/how_it_works/title": "Как это работает?",
     "our_team": "Наша команда",
-    "our_team/maryna": "О Марине",
-    "our_team/khalid": "О Халиде",
-    "our_team/kseniya": "О Ксении"
+    "our_team/maryna": "Канбан-доска - Drag-n-Drop, колонки, задачи",
+    "our_team/khalid": "Взаимодействие с API, Авторизация пользовотеля",
+    "our_team/kseniya": "Модальные окна, Локализация"
 }

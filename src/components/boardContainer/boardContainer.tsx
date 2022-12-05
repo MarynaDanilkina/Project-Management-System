@@ -58,7 +58,6 @@ const BoardContainer = () => {
     }
     if (result.type === 'column') {
       const items = reorderColumn(boards, source.index, destination.index);
-      console.log('items:', items);
       dispatch(addDndcolumn({ items }));
     }
   }
