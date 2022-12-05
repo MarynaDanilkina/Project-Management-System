@@ -20,14 +20,6 @@ const Welcome = () => {
             <img src="./welcome.png" alt="welcome" />
           </div>
         </div>
-        <div className="welcome__video-container">
-          <div className="welcome__video-wrapper">
-            <h2>{t('main_page/how_it_works/title')}</h2>
-            <div>
-              <div className="welcome__video"></div>
-            </div>
-          </div>
-        </div>
         <div className="welcome__team-container">
           <div className="welcome__team-wrapper">
             <h2>{t('our_team')}</h2>

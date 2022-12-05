@@ -4,15 +4,14 @@ import { useAppDispatch, useAppSelector } from 'interface/interface';
 import Modal from '../editBoardOrAddBoardOrAddTaskDialogWindow';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { selectToken } from 'toolkitRedux/userSlice/userSlice';
+import { selectToken, selectUser } from 'toolkitRedux/userSlice/userSlice';
 import { isInputRefValueEmpty } from '../../pages/AllBoard/AllBoard';
-
-const userId = 'dd398f23-1324-4e5c-95f7-0dd193b5e89f';
 
 const AddTask = ({ board }: { board: Column }) => {
   const token = useAppSelector(selectToken);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
   const { boards } = useAppSelector((state) => state.boards);
 
   const [fetchErrorMsg, setFetchErrMsg] = useState('');
@@ -32,11 +31,12 @@ const AddTask = ({ board }: { board: Column }) => {
       : setDescriptionError(false);
     if (!isInputRefValueEmpty(inputRefTitle) && !isInputRefValueEmpty(inputRefDescription)) {
       token &&
+        user &&
         dispatch(
           fetchCreateTask({
             title: inputRefTitle.current.value,
             description: inputRefDescription.current.value,
-            userId,
+            userId: user.userId,
             token,
             boardId: boards.id,
             columnId: board.id,

@@ -24,12 +24,10 @@ export const reduserSlice = createSlice({
   initialState,
   reducers: {
     addDnd(state, action) {
-      console.log(action);
       const { sInd, items } = action.payload;
       state.boards.columns[sInd].tasks = items;
     },
     addDnd2(state, action) {
-      console.log(action);
       const { items, sInd, dInd } = action.payload;
       state.boards.columns[sInd].tasks = items[sInd];
       state.boards.columns[dInd].tasks = items[dInd];
