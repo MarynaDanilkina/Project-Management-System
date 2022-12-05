@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://whispering-mesa-64104.herokuapp.com/';
+export const BASE_URL = 'http://localhost:4000/';
 
 export type ErrorMessage = { statusCode: number; message: string };
 
